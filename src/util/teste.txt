@@ -1,0 +1,77 @@
+const Discord = require('discord.js');
+const YouTube = require('simple-youtube-api');
+const youtube = new YouTube(process.env.YOUTUBE_API_KEY)
+const ytdl = require('ytdl-core');
+//const search = require('yt-search')
+
+const run = async(yukie, message, args, data) => {
+    const s = args.join(' ')
+    
+    if (message.author.id !== data.ownerID) return;
+    try {
+        const video = s.match(/https:\/\/www.youtube.com\/watch\?v=/g)
+        if (video) {
+            youtube.getVideo(s).then(song => {
+                const queue = yukie.queues.get(message.guild.id)
+                if (queue) {
+                    queue.songs.push(song);
+                    yukie.queues.set(message.guild.id, queue);
+                } else playSong(yukie, message, song);
+            }).catch(e => { return message.reply('este url é inválido!')})
+        } 
+        if (!video) {
+            youtube.searchVideos(s, 1).then(r => {
+                if (!r) return message.channel.send('Desculpe, não encontrei nenhuma música com esse nome!')
+                const song = r[0]
+                const queue = yukie.queues.get(message.guild.id);
+                if (queue) {
+                    queue.songs.push(song);
+                    yukie.queues.set(message.guild.id, queue);
+                } else playSong(yukie, message, song);
+            }).catch(O_o => {message.channel.send('<@!'+message.author+`> desculpe, não achei nenhuma música com esse nome!`)})
+        } 
+    } catch (e) {
+        console.log(e)
+    }
+    const playSong = async (bot, msg, song) => {
+        let queue = bot.queues.get(msg.member.guild.id);
+
+        if (!song) {
+            if (queue) {
+                queue.connection.disconnect()
+                return yukie.queues.delete(message.member.guild.id);
+            }
+        }
+        if (!message.member.voice.channel) {
+            return message.reply('você precisa estar conectado em um canal de voz!')
+        }
+        if (song) message.channel.send('**➡️ Adicionando na fila:** `'+song.title+'`')
+        if (!queue) {
+            const conn = await message.member.voice.channel.join();
+            queue = {
+                volume: 5,
+                connection: conn,
+                dispatcher: null,
+                songs: [song],
+                title: song.title,
+            };
+            queue.dispatcher = await queue.connection.play(
+                await ytdl(song.url, { highWaterMark: 1 << 25, filter: "audioonly" }),
+                {
+                    type: "opus",
+                }
+            )
+            .on("finish", () => {
+                queue.songs.shift();
+                playSong(yukie, message, queue.songs[0]);
+                msg.then(msg => msg.delete().catch(O_o => {}));
+            })
+            yukie.queues.set(message.member.guild.id, queue)
+        }
+    }
+}
+module.exports = {
+    aliase: 'p',
+    help: '',
+    run,
+}
