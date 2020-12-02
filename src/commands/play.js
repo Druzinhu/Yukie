@@ -1,69 +1,46 @@
-const Discord = require('discord.js');
-//const YouTube = require('simple-youtube-api');
-//const youtube = new YouTube(process.env.YOUTUBE_API_KEY)
+//const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
 const search = require('../util/music/search')
 
 const run = async(yukie, message, args, data) => {
   const queue = yukie.queues.get(message.guild.id);
   try {
-    const song = await search(args, message)
+    const song = await search(args[0], message)
 
     if (queue && message.guild.me.voice.channel === null) {
-       queue.msg.then(m => m.delete().catch(O_o => {}))
-       if (queue.pause_resume) queue.pause_resume.then(msg => msg.delete().catch(O_o => {}))
+      queue.msg.then(m => m.delete().catch(O_o => {}))
       yukie.queues.delete(message.member.guild.id)
-      return player(yukie, message, song, data);
+      return player(yukie, message, song);
     }
     else if (queue) {
       queue.songs.push(song);
       yukie.queues.set(message.guild.id, queue);
-    } else return player(yukie, message, song, data);
+    } else return player(yukie, message, song);
   }
-  catch (e) {
-    console.error(e);
-    message.channel.send('**Erro ao pesquisar música**')
+  catch (err) {
+    console.error(err);
+    message.channel.send('Erro: ' + err)
   }
 }
-  const player = async (yukie, message, song, data) => {
+  const player = async (yukie, message, song) => {
     let queue = yukie.queues.get(message.member.guild.id);
+
     if (!song) {
       if (queue) {
         queue.connection.disconnect()
-        return;
+        return yukie.queues.delete(message.member.guild.id)
       }
-    }
+    };
     if (queue && message.guild.me.voice.channel === null) {
        queue.msg.then(m => m.delete().catch(O_o => {}))
-       if (queue.pause_resume) queue.pause_resume.then(msg => msg.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
     };
-    if (!message.member.voice.channel) {
-      return message.reply('você não está conectado em nenhum canal de voz!')
+    msg = null
+    if(song.duration !== null) {
+      const playerEmbed = require('../util/music/playerEmbed')
+      const embed = await playerEmbed(song)
+      msg = message.channel.send(`**Tocando agora:**`, embed);
     }
-    const song_secs = (await ytdl.getInfo(song.url)).videoDetails.lengthSeconds;
-    if (song_secs > 39600) {
-      return message.reply('eu não reproduzo músicas com mais de 10 horas!')
-    }; 
-    var toHHmmss = (secs) => {
-      var sec_num = parseInt(secs, 10)
-      var hour    = Math.floor(sec_num / 3600)
-      var minutes = Math.floor(sec_num / 60) % 60
-      var seconds = sec_num % 60
-
-      return [hour, minutes, seconds]
-      .map(v => v < 10 ? "0" + v : v)
-      .filter((v, i) => v !== "00" || i > 0)
-      .join(':')
-    }
-    const duration = toHHmmss(song_secs)
-    let embed = new Discord.MessageEmbed()
-    .setTitle(`${song.title}`)
-    .setDescription(`Por \`${song.author.tag}\` • Duração ${duration}`)
-    .setThumbnail('https://i.ytimg.com/vi/'+song.id+'/mqdefault.jpg')
-    .setColor(process.env.DEFAULT_COLOR)
-    let msg = message.channel.send(`**Tocando agora:**`, embed);
-
     if (!queue) {
       const conn = await message.member.voice.channel.join();
       queue = {
@@ -84,7 +61,6 @@ const run = async(yukie, message, args, data) => {
       queue.songs.shift();
       player(yukie, message, queue.songs[0]);
        msg.then(m => m.delete().catch(O_o => {}))
-       if (queue.pause_resume) queue.pause_resume.then(msg => msg.delete().catch(O_o => {}))
     });
     queue.voiceChannel = message.member.voice.channel;
     yukie.queues.set(message.member.guild.id, queue);
