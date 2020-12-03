@@ -16,7 +16,7 @@ module.exports = {
             };*/
             let code = args.join(' ');
 
-            if (code === 'ncu -ver') {
+            if (code === 'ncu --ver') {
                 var ncu = require('npm-check-updates')
                 message.channel.send('```js\n\'checking for updates...\'```')
                 var upgraded = await ncu.run({
