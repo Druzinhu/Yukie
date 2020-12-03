@@ -35,12 +35,10 @@ const run = async(yukie, message, args, data) => {
        queue.msg.then(m => m.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
     };
-    msg = null
-    if(song.duration !== null) {
-      const playerEmbed = require('../util/music/playerEmbed')
-      const embed = await playerEmbed(song)
-      msg = message.channel.send(`**Tocando agora:**`, embed);
-    }
+    const playerEmbed = require('../util/music/playerEmbed')
+    const embed = await playerEmbed(song)
+    msg = message.channel.send(`**Tocando agora:**`, embed);
+
     if (!queue) {
       const conn = await message.member.voice.channel.join();
       queue = {
