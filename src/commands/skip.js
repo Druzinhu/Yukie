@@ -22,6 +22,6 @@ module.exports = {
         queue.songs.shift();
         yukie.queues.set(message.guild.id, queue);
         player(yukie, message, queue.songs[0]);
-         queue.msg.then(m => m.delete().catch(O_o => {}));
+        if (msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}));
     }
 }

@@ -1,4 +1,5 @@
 const Discord = require('discord.js')
+const ytsearch = require('yt-search')
 
 module.exports = async function playerEmbed(song) {
     var toHHmmss = (secs) => {
@@ -12,12 +13,13 @@ module.exports = async function playerEmbed(song) {
         .filter((v, i) => v !== "00" || i > 0)
         .join(':')
     }
+    song.duration = (await ytsearch( { videoId: song.id })).seconds
     duration = toHHmmss(song.duration)
 
     let embed = new Discord.MessageEmbed()
-    .setTitle(`${song.title}`)
-    .setDescription(`Por \`${song.author.tag}\` • Duração ${duration}`)
-    .setThumbnail('https://i.ytimg.com/vi/'+song.id+'/mqdefault.jpg')
+    .setTitle(song.title)
+    .setDescription(`<@!${song.author.id}> • Duração ${duration}`)
+    .setThumbnail(song.thumbnail)
     .setColor(process.env.DEFAULT_COLOR)
-    return embed;
+    return embed
 }

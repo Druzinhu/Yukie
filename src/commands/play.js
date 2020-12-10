@@ -3,15 +3,33 @@ const ytdl = require('ytdl-core');
 const search = require('../util/music/search')
 
 const run = async(yukie, message, args, data) => {
-  const queue = yukie.queues.get(message.guild.id);
+  let queue = yukie.queues.get(message.guild.id);
   try {
     const song = await search(args[0], message)
-
+    if (song == false) return;
+    
     if (queue && message.guild.me.voice.channel === null) {
       queue.msg.then(m => m.delete().catch(O_o => {}))
-      yukie.queues.delete(message.member.guild.id)
-      return player(yukie, message, song);
+      await yukie.queues.delete(message.member.guild.id)
     }
+    // P L A Y L I S T
+    if (song.Playlist) {
+      if (!queue) {
+        await player(yukie, message, song);
+        if (song._videos.length > 2) videos = song._videos.filter(v => v.url !== song.url)
+      }
+      if (yukie.queues.get(message.guild.id) && videos) {
+        return videos.map(song => {
+          console.log(song.author)
+          console.log(song) 
+          queue = yukie.queues.get(message.guild.id)
+          queue.songs.push(song) 
+          yukie.queues.set(message.guild.id, queue);
+        })
+      }
+      else return player(yukie, message, song);
+    }
+    // V I D E O 
     else if (queue) {
       queue.songs.push(song);
       yukie.queues.set(message.guild.id, queue);
@@ -19,7 +37,7 @@ const run = async(yukie, message, args, data) => {
   }
   catch (err) {
     console.error(err);
-    message.channel.send('Erro: ' + err)
+    message.channel.send(err)
   }
 }
   const player = async (yukie, message, song) => {
@@ -32,15 +50,14 @@ const run = async(yukie, message, args, data) => {
       }
     };
     if (queue && message.guild.me.voice.channel === null) {
-       queue.msg.then(m => m.delete().catch(O_o => {}))
+      if (queue.msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
     };
-    msg = null
-    if(song.duration !== null) {
-      const playerEmbed = require('../util/music/playerEmbed')
-      const embed = await playerEmbed(song)
-      msg = message.channel.send(`**Tocando agora:**`, embed);
-    }
+    //
+      const playingEmbed = require('../util/music/playingEmbed')
+      const embed = await playingEmbed(song)
+      msg = message.channel.send('<:playing_now:786551305514647563>** | Tocando agora:**', embed)
+    //
     if (!queue) {
       const conn = await message.member.voice.channel.join();
       queue = {
@@ -60,7 +77,7 @@ const run = async(yukie, message, args, data) => {
     .on("finish", () => {
       queue.songs.shift();
       player(yukie, message, queue.songs[0]);
-       msg.then(m => m.delete().catch(O_o => {}))
+      if (msg !== null) msg.then(m => m.delete().catch(O_o => {}))
     });
     queue.voiceChannel = message.member.voice.channel;
     yukie.queues.set(message.member.guild.id, queue);
