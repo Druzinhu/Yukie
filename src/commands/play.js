@@ -53,11 +53,18 @@ const run = async(yukie, message, args, data) => {
       if (queue.msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
     };
+<<<<<<< HEAD
     //
       const playingEmbed = require('../util/music/playingEmbed')
       const embed = await playingEmbed(song)
       msg = message.channel.send('<:playing_now:786551305514647563>** | Tocando agora:**', embed)
     //
+=======
+    const playerEmbed = require('../util/music/playerEmbed')
+    const embed = await playerEmbed(song)
+    msg = message.channel.send(`**Tocando agora:**`, embed);
+
+>>>>>>> 57231454ed88dd551d6ba8522980d99d3c3e3d9d
     if (!queue) {
       const conn = await message.member.voice.channel.join();
       queue = {
