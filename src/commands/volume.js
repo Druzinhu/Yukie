@@ -7,7 +7,7 @@ module.exports = {
         
         if (!message.member.voice.channel) return;
         if (!queue) {
-            return mensagens.set(message.reply('não estou reproduzindo nenhuma música no momento'))
+            return mensagens.set(message.reply('não estou reproduzindo nenhuma música no momento!'))
         }
         if (message.author.id !== queue.songs[0].author.id) {
             return mensagens.set(message.reply('somente o usuário que requisitou a música pode aumentar o volume!'))
@@ -15,6 +15,7 @@ module.exports = {
         if (isNaN(vol) || vol < 1 || vol > 100) {
             return message.reply('o valor do volume deve ser entre 1 e 100!')
         }
+        
         queue.dispatcher.setVolume(vol / 100);
         queue.volume = vol;
         yukie.queues.set(message.guild.id, queue);

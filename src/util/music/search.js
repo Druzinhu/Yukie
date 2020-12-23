@@ -7,7 +7,6 @@ module.exports = async function search(s, message) {
         message.reply('você precisa estar conectado em algum canal de voz!')
         return song = false
     };
-<<<<<<< HEAD
     const playlistURL = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g)
     const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g)
 
@@ -17,9 +16,6 @@ module.exports = async function search(s, message) {
         videos.author = message.author
     }
     else if (videoURL) {
-=======
-    if (s.match(/https:\/\/www.youtube.com\/watch\?v=/g)) {
->>>>>>> 57231454ed88dd551d6ba8522980d99d3c3e3d9d
         result = await youtube.getVideo(s).then(r => r)
     }
     else {
