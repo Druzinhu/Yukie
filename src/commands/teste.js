@@ -6,7 +6,9 @@ const ytdl = require('ytdl-core');
 const run = async(yukie, message, args, data) => {
   const s = args.join(' ')
   let queue = yukie.queues.get(message.guild.id)
+
   if (message.author.id !== data.ownerID) return;
+  
     try {
         if (s.match(/https:\/\/www.youtube.com\/playlist\?list=/g)) {
           const playlist = await youtube.getPlaylist(s)

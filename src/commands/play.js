@@ -6,7 +6,7 @@ const run = async(yukie, message, args, data) => {
   let queue = yukie.queues.get(message.guild.id);
   try {
     const song = await search(args[0], message)
-    if (song == false) return;
+    if (song === false) return;
     
     if (queue && message.guild.me.voice.channel === null) {
       queue.msg.then(m => m.delete().catch(O_o => {}))
@@ -27,7 +27,7 @@ const run = async(yukie, message, args, data) => {
       }
       else return player(yukie, message, song);
     }
-    // V I D E O 
+    // V I D E O S
     else if (queue) {
       queue.songs.push(song);
       yukie.queues.set(message.guild.id, queue);

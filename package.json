@@ -23,5 +23,13 @@
     "yt-search": "^2.5.1",
     "ytdl-core": "^4.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dru61/Yukie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dru61/Yukie/issues"
+  },
+  "homepage": "https://github.com/Dru61/Yukie#readme"
 }
