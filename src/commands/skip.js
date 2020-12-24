@@ -13,7 +13,7 @@ module.exports = {
         }
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return;
         
-        if (message.author.id === queue.songs[0].author.id) {
+        if (message.author.id !== queue.songs[0].author.id) {
             const playing = queue.songs[0].url
             const members = message.member.voice.channel.members.filter(u => !u.user.bot)
 
