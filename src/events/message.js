@@ -17,6 +17,7 @@ module.exports = async (message, yukie) => {
 			prefix: prefix,
 			emojis: emojis,
 			ownerID: process.env.OWNER,
+			message: message,
 		}
 		console.log('log', `${message.author.tag} [ID ${message.author.id}] executou: ${prefix+comando}`);
 		commands.run(yukie, message, args, data);

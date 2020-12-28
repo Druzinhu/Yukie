@@ -11,6 +11,7 @@ module.exports = {
         if (queue.dispatcher.pausedSince === null) {
             return message.reply('não há nenhuma música pausada!')
         }
+        queue.paused = false
         queue.dispatcher.resume()
         message.channel.send(`⏸️ **Música despausada** por ${message.author}`)
     }

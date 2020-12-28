@@ -7,6 +7,12 @@ module.exports = async function search(s, message) {
         message.reply('você precisa estar conectado em algum canal de voz!')
         return song = false
     };
+
+    if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) {
+        message.reply('você não está conectado no mesmo canal de voz que eu!')
+        return song = false
+    }
+
     const playlistURL = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g)
     const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g)
 

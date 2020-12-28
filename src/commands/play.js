@@ -3,15 +3,17 @@ const ytdl = require('ytdl-core');
 const search = require('../util/music/search')
 
 const run = async(yukie, message, args, data) => {
-  let queue = yukie.queues.get(message.guild.id);
   try {
     const song = await search(args[0], message)
     if (song === false) return;
     
-    if (queue && message.guild.me.voice.channel === null) {
-      queue.msg.then(m => m.delete().catch(O_o => {}))
+    if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
+        yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
     }
+
+    let queue = yukie.queues.get(message.guild.id);
+
     // P L A Y L I S T
     if (song.Playlist) {
       if (!queue) {
@@ -27,6 +29,7 @@ const run = async(yukie, message, args, data) => {
       }
       else return player(yukie, message, song);
     }
+
     // V I D E O S
     else if (queue) {
       queue.songs.push(song);
@@ -64,6 +67,8 @@ const player = async (yukie, message, song) => {
       connection: conn,
       dispatcher: null,
       songs: [song],
+      paused: false,
+      guild: message.guild,
       msg: msg,
     };
   };
