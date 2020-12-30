@@ -15,7 +15,7 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed()
 		.setTitle(''+ROBOT+' Minhas informações')
-		.setThumbnail(yukie.user.avatarURL())
+		.setThumbnail(yukie.user.displayAvatarURL())
 		.setDescription('** **')
 		.setColor(process.env.DEFAULT_COLOR)
 		.addFields(
