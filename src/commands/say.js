@@ -15,13 +15,13 @@ module.exports = {
 			message.channel.send(msg)
 		}
 		else {
-			let embed = new Discord.MessageEmbed()
+			const embed = new Discord.MessageEmbed()
 			.setTitle('Como usar?')
 			.addField('Exemplo:', '`'+pc+'` `'+yukie.user.username+' é minha amiga!`')
 			.setDescription('`'+pc+'` + `[frase]`')
 			.setTimestamp()
 			.addField('Permissão:', 'Para utilizar este comando, é necessário que você tenha a permissão de `administrador`.')
-			.setFooter(`Executado por ${message.author.tag}`, message.author.avatarURL())
+			.setFooter(`Executado por ${message.author.tag}`, message.author.displayAvatarURL())
 			.setColor('RANDOM')
 			.setThumbnail(message.author.displayAvatarURL({ format: 'png', size: 128 }))
 			message.channel.send(message.author, embed)
