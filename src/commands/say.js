@@ -23,7 +23,7 @@ module.exports = {
 			.addField('Permissão:', 'Para utilizar este comando, é necessário que você tenha a permissão de `administrador`.')
 			.setFooter(`Executado por ${message.author.tag}`, message.author.avatarURL())
 			.setColor('RANDOM')
-			.setThumbnail(message.author.avatarURL({ format: 'png', size: 128 }))
+			.setThumbnail(message.author.displayAvatarURL({ format: 'png', size: 128 }))
 			message.channel.send(message.author, embed)
 		}
 	}
