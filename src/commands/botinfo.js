@@ -9,6 +9,12 @@ module.exports = {
 		const emojis = data.emojis;
 
 		const embed = new Discord.MessageEmbed()
+<<<<<<< HEAD
+=======
+		.setTitle(''+ROBOT+' Minhas informações')
+		.setThumbnail(yukie.user.displayAvatarURL())
+		.setDescription('** **')
+>>>>>>> badb599e41ffd85818b51d3eb3be15ee26a7e00b
 		.setColor(process.env.DEFAULT_COLOR)
 		.setTitle(''+emojis.ROBOT+' Minhas informações')
 		.setDescription('** **')
