@@ -3,9 +3,9 @@ const ytdl = require('ytdl-core');
 const search = require('../util/music/search')
 
 const run = async(yukie, message, args, data) => {
-  if(!args[0]) return message.reply("insira alguma palavra para efetuar a pesquisa.")
+  if(!args.join(' ')) return message.reply("insira alguma palavra para efetuar a pesquisa.")
   try {
-    const song = await search(args[0], message)
+    const song = await search(args.join(' '), message)
     if (song === false) return;
     
     if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
