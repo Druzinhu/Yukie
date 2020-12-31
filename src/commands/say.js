@@ -12,7 +12,7 @@ module.exports = {
 		}
 		if (msg) {
 			message.delete().catch(O_o => {})
-			message.channel.send(msg)
+			return message.channel.send(msg)
 		}
 		else {
 			let embed = new Discord.MessageEmbed()
@@ -24,6 +24,7 @@ module.exports = {
 			.setFooter(`Executado por ${message.author.tag}`, message.author.avatarURL())
 			.setColor('RANDOM')
 			.setThumbnail(message.author.avatarURL({ format: 'png', size: 128 }))
+			
 			message.channel.send(message.author, embed)
 		}
 	}

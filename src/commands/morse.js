@@ -103,5 +103,6 @@ module.exports.run = async (yukie, message, args, data) => {
 		if (l === '/') return;
 		array[i] = obj[array[i].toUpperCase()]
 	});
+	
 	message.channel.send(array.join(' '))
 }

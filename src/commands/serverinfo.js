@@ -13,7 +13,7 @@ module.exports = {
 		const GEARZ = data.emojis.GEARZ;
 		const TITLE = data.emojis.TITLE;
 
-		let embed = new Discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 		.setTitle(`${TITLE} ${message.guild.name}`)
 		.setThumbnail(message.guild.iconURL())
 		.setDescription('** **')

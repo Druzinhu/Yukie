@@ -1,3 +1,6 @@
+const Discord = require('discord.js');
+const cooldown = new Discord.Collection();
+
 const prefix = process.env.PREFIX;
 require('../util/emojis');
 
@@ -12,14 +15,34 @@ module.exports = async (message, yukie) => {
 	
 	const commands = yukie.commands.get(comando) || yukie.aliases.get(comando);
 	if (commands) {
-		const data = { 
-			comando: comando,
-			prefix: prefix,
-			emojis: emojis,
-			ownerID: process.env.OWNER,
-			message: message,
-		}
 		console.log('log', `${message.author.tag} [ID ${message.author.id}] executou: ${prefix+comando}`);
-		commands.run(yukie, message, args, data);
-	}
+
+		if (cooldown.has(message.author.id)) {
+            const calc = 10 - Math.floor((Date.now() - cooldown.get(message.author.id)) / 1000)
+
+			if (calc === 1) seconds = calc + ' segundo'
+			else seconds = calc + ' segundos'
+
+			return message.channel.send(`${message.author} Você deve esperar ${seconds} para executar algum comando novamente!`)
+		
+		} else {
+			if (![process.env.OWNER, '451920956768649226'].includes(message.author.id)) {
+				cooldown.set(message.author.id, Date.now())
+
+				timeout = setTimeout(() => {
+					cooldown.delete(message.author.id)
+				}, 10000)
+			}
+
+			const data = { 
+				comando: comando,
+				prefix: prefix,
+				emojis: emojis,
+				ownerID: process.env.OWNER,
+				message: message,
+			}
+			
+			commands.run(yukie, message, args, data);
+		}
+	};
 };
