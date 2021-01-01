@@ -3,6 +3,7 @@ const ytdl = require('ytdl-core');
 const search = require('../util/music/search')
 
 const run = async(yukie, message, args, data) => {
+<<<<<<< HEAD
   if (!message.member.voice.channel) {
     return message.reply('Você precisa estar conectado em algum canal de voz!')
   };
@@ -13,13 +14,21 @@ const run = async(yukie, message, args, data) => {
 
   if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.')
 
+=======
+  if(!args.join(' ')) return message.reply("insira alguma palavra para efetuar a pesquisa.")
+>>>>>>> 33a3651497c010174899ad058f4025c41fe855af
   try {
     const song = await search(args.join(' '), message)
     if (song === false) return;
     
     if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
+<<<<<<< HEAD
       if (yukie.queues.get(message.guild.id).msg != null) yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
+=======
+        yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}))
+        yukie.queues.delete(message.member.guild.id)
+>>>>>>> 33a3651497c010174899ad058f4025c41fe855af
     }
 
     let queue = yukie.queues.get(message.guild.id);
@@ -68,8 +77,13 @@ const player = async (yukie, message, song) => {
   //
   const playingEmbed = require('../util/music/playingEmbed')
   const embed = await playingEmbed(song)
+<<<<<<< HEAD
   msg = message.channel.send('🎶** | Tocando agora:**', embed)
   //
+=======
+  msg = message.channel.send('<:playing_now:786551305514647563>** | Tocando agora:**', embed)
+  
+>>>>>>> 33a3651497c010174899ad058f4025c41fe855af
   if (!queue) {
     const conn = await message.member.voice.channel.join();
     queue = {
