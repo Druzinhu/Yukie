@@ -19,6 +19,7 @@ module.exports = {
             if (code === 'ncu --ver') {
                 var ncu = require('npm-check-updates')
                 message.channel.send('```js\n\'checking for updates...\'```')
+                
                 var upgraded = await ncu.run({
                 jsonUpgraded: false,
                 silent: true
@@ -26,7 +27,7 @@ module.exports = {
                 code = upgraded
             };
 
-            if (message.mentions.users.first()) code = code.replace(`<@!${message.mentions.users.first().id}>`, `yukie.users.fetch(message.mentions.users.first().id)`)
+            if (message.mentions.users.first() && code.includes('--user')) code = code.replace('--user', '').replace(`<@!${message.mentions.users.first().id}>`, `yukie.users.fetch(message.mentions.users.first().id)`)
 
             let result; 
             try {

@@ -16,9 +16,10 @@ module.exports = {
         if (message.author.id !== queue.songs[0].author.id) {
             const playing = queue.songs[0].url
             const members = message.member.voice.channel.members.filter(u => !u.user.bot)
+            const membersize = Math.round(members.size / 2)
 
-            let embed = new Discord.MessageEmbed()
-            .setDescription('Pelo menos **metade** dos usuários conectados devem concordarem!\nUsuários (0/'+members.size+') concordaram')
+            const embed = new Discord.MessageEmbed()
+            .setDescription('Aproximadamente **metade** dos usuários conectados devem concordar!\nUsuários (0/'+membersize+') concordaram')
             .setFooter(`Clique em '⏭️' para pular a música`)
             .setColor(process.env.DEFAULT_COLOR)
 
@@ -35,17 +36,20 @@ module.exports = {
                     };
                     if (playing !== queue.songs[0].url) return;
 
-                    msg.edit(embed.setDescription('Pelo menos **metade** dos usuários conectados devem concordarem!\nUsuários ('+(r.count - 1)+'/'+members.size+') concordaram'))
+                    if (!yukie.queues.get(message.guild.id)) return;
 
-					if (r.count - 1 > Math.floor(members.size / 2)) {
+                    msg.edit(embed.setDescription('Aproximadamente **metade** dos usuários conectados devem concordar!\nUsuários ('+(r.count - 1)+'/'+membersize+') concordaram'))
+
+					if (r.count - 1 >= membersize) {
                         collector.stop();
                         if (msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}));
 
                         msg.delete();
                         message.channel.send('⏭️ **Música pulada**')
                         
+                        queue.paused = false
                         queue.songs.shift();
-                        yukie.queues.set(message.guild.id, queue);
+                        //yukie.queues.set(message.guild.id, queue);
                         player(yukie, message, queue.songs[0]);
                     }
                 })
@@ -56,8 +60,10 @@ module.exports = {
             })
         }
         message.channel.send(`⏭️ **Música pulada** por ${queue.songs[0].author}`)
+
+        queue.paused = false
         queue.songs.shift();
-        yukie.queues.set(message.guild.id, queue);
+        //yukie.queues.set(message.guild.id, queue);
         player(yukie, message, queue.songs[0]);
 
         queue.msg.then(m => m.delete().catch(O_o => {}));

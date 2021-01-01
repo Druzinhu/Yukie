@@ -3,16 +3,6 @@ const youtube = new YouTube(process.env.YOUTUBE_API_KEY)
 const Discord = require('discord.js')
 
 module.exports = async function search(s, message) {
-    if (!message.member.voice.channel) {
-        message.reply('você precisa estar conectado em algum canal de voz!')
-        return song = false
-    };
-
-    if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) {
-        message.reply('você não está conectado no mesmo canal de voz que eu!')
-        return song = false
-    }
-
     const playlistURL = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g)
     const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g)
 
@@ -51,6 +41,7 @@ module.exports = async function search(s, message) {
         song.play = false
         return message.reply('eu não reproduzo músicas com mais de 10 horas!')
     };*/
+
     if (song.Playlist) {
         const embed = new Discord.MessageEmbed()
         .setAuthor(`${message.author.tag}`, `${message.author.avatarURL()}`)

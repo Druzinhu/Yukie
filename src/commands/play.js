@@ -3,12 +3,22 @@ const ytdl = require('ytdl-core');
 const search = require('../util/music/search')
 
 const run = async(yukie, message, args, data) => {
+  if (!message.member.voice.channel) {
+    return message.reply('Você precisa estar conectado em algum canal de voz!')
+  };
+
+  if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) {
+    return message.reply('Você não está conectado no mesmo canal de voz que eu!')
+  };
+
+  if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.')
+
   try {
-    const song = await search(args[0], message)
+    const song = await search(args.join(' '), message)
     if (song === false) return;
     
     if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
-        yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}))
+      if (yukie.queues.get(message.guild.id).msg != null) yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}))
       await yukie.queues.delete(message.member.guild.id)
     }
 
@@ -58,7 +68,7 @@ const player = async (yukie, message, song) => {
   //
   const playingEmbed = require('../util/music/playingEmbed')
   const embed = await playingEmbed(song)
-  msg = message.channel.send('<:playing_now:786551305514647563>** | Tocando agora:**', embed)
+  msg = message.channel.send('🎶** | Tocando agora:**', embed)
   //
   if (!queue) {
     const conn = await message.member.voice.channel.join();

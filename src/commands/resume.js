@@ -8,9 +8,10 @@ module.exports = {
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return;
         if (!queue) return;
 
-        if (queue.dispatcher.pausedSince === null) {
+        if (!queue.paused) {
             return message.reply('não há nenhuma música pausada!')
         }
+
         queue.paused = false
         queue.dispatcher.resume()
         message.channel.send(`⏸️ **Música despausada** por ${message.author}`)
