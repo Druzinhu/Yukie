@@ -27,7 +27,7 @@ module.exports = {
                 code = upgraded
             };
 
-            if (message.mentions.users.first() && code.includes('--user')) code = code.replace('--user', '').replace(`<@!${message.mentions.users.first().id}>`, `yukie.users.fetch(message.mentions.users.first().id)`)
+            if (message.mentions.users.first() && code.includes("--user")) code = code.replace('--user', '').replace(`<@!${message.mentions.users.first().id}>`, `yukie.users.fetch(message.mentions.users.first().id)`)
 
             let result; 
             try {
