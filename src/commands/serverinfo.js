@@ -14,9 +14,9 @@ module.exports = {
 			{ name: ''+data.emojis.CROWN+' Dono', value: '`'+message.guild.owner.user.tag+' (ID '+message.guild.ownerID+')`', inline: true },
 			{ name: '🌎 Região', value: '`'+message.guild.region+'`', inline: true },
 			{ name: '🌌 Canais:', value: '**De texto**: `'+message.guild.channels.cache.filter(chn => chn.type === "text").size+'`\n**De voz**: `'+message.guild.channels.cache.filter(chn => chn.type === "voice").size+'`', inline: true },
-			{ name: ''+data.emojis.USERS+' Membros `'+message.guild.members.cache.size+'`', value: '** **', inline: true },
-			{ name: ''+data.emojis.CAT+' Entrei em', value: '`'+moment(message.guild.me.joinedAt).format('DD/MM/YY, [às] HH:mm:ss')+'`', inline: true },
-			{ name: ''+data.emojis.GEARZ+' Criado em', value: '`'+moment(message.guild.createdAt).format('DD/MM/YY, [às] HH:mm:ss')+'`', inline: true }
+			{ name: ''+data.emojis.USERS+' Membros', value: `\`${message.guild.members.filter(u => !u.user.bot)}\` **usuários**\n\`${message.guild.members.filter(u => !u.user.bot)}\` **bots**`, inline: true },
+			{ name: ''+data.emojis.GEARZ+' Criado em', value: '`'+moment(message.guild.createdAt).format('DD/MM/YY, [às] HH:mm:ss')+'`', inline: true },
+			{ name: ''+data.emojis.CAT+' Entrei em', value: '`'+moment(message.guild.me.joinedAt).format('DD/MM/YY, [às] HH:mm:ss')+'`', inline: true }
 		);
 		message.channel.send(message.author, embed)
 	}
