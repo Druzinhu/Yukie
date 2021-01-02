@@ -7,7 +7,7 @@ module.exports = {
 	async run (yukie, message, args, data) {
 		const embed = new Discord.MessageEmbed()
 		.setColor(process.env.DEFAULT_COLOR)
-		.setTitle(`${data.emojis.RAINBOW_CAT} ${message.guild.name}`)
+		.setTitle(`${data.emojis.RAINBOW_CAT} | ${message.guild.name}`)
 		.setThumbnail(message.guild.iconURL())
 		.addFields(
 			{ name: '💻 ID', value: '`'+message.guild.id+'`', inline: true },
