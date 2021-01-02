@@ -18,11 +18,7 @@ module.exports = {
             const members = message.member.voice.channel.members.filter(u => !u.user.bot)
             const membersize = Math.round(members.size / 2)
 
-<<<<<<< HEAD
             const embed = new Discord.MessageEmbed()
-=======
-            let embed = new Discord.MessageEmbed()
->>>>>>> 33a3651497c010174899ad058f4025c41fe855af
             .setDescription('Aproximadamente **metade** dos usuários conectados devem concordar!\nUsuários (0/'+membersize+') concordaram')
             .setFooter(`Clique em '⏭️' para pular a música`)
             .setColor(process.env.DEFAULT_COLOR)
@@ -40,15 +36,10 @@ module.exports = {
                     };
                     if (playing !== queue.songs[0].url) return;
 
-<<<<<<< HEAD
                     if (!yukie.queues.get(message.guild.id)) return;
 
                     msg.edit(embed.setDescription('Aproximadamente **metade** dos usuários conectados devem concordar!\nUsuários ('+(r.count - 1)+'/'+membersize+') concordaram'))
 
-=======
-                    msg.edit(embed.setDescription('Aproximadamente **metade** dos usuários conectados devem concordar!\nUsuários ('+(r.count - 1)+'/'+membersize+') concordaram'))
-
->>>>>>> 33a3651497c010174899ad058f4025c41fe855af
 					if (r.count - 1 >= membersize) {
                         collector.stop();
                         if (msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}));

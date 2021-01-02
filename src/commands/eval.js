@@ -2,42 +2,47 @@ const Discord = require('discord.js');
 
 module.exports = {
     aliase: 'e',
+    requireAcessPermission: true,
     async run (yukie, message, args, data) {
-            if (!['748320609746026607', '451920956768649226'].includes(message.author.id)) return;
-            /*let v = -1
-            if (message.mentions.users.first()) {
-                args.forEach((value, index) => {
-                    const r = /<@!?(\d{16,18})>/g
-                    if(r.test(args[index])) {
-                        v++
-                    }
-                    args[index] = args[index].replace(/<@!?(\d{16,18})>/g, "message.mentions.users.map(u => u)["+v+"]")
-                });
-            };*/
-            let code = args.join(' ');
+        let code = args.join(' ');
+        let hide = false
 
-            if (code === 'ncu --ver') {
-                var ncu = require('npm-check-updates')
-                message.channel.send('```js\n\'checking for updates...\'```')
-                
-                var upgraded = await ncu.run({
+        if (code.includes('--hide')) {
+            hide = true
+            code = code.replace('--hide', '')
+        }
+
+<<<<<<< HEAD
+        mentioned = message.mentions.users
+            if (mentioned && code.includes('--user')) {
+            code = code.replace('--user', '').replace(/<@!?(\d{16,18})>/g, `yukie.users.fetch(message.mentions.users.map(u => u.id))`)
+            hide = false
+        }
+        delete mentioned
+=======
+            if (message.mentions.users.first()) code = code.replace(`<@!${message.mentions.users.first().id}>`, `yukie.users.fetch(message.mentions.users.first().id)`)
+>>>>>>> c3290346518f4a1827bce1af71f1a97df69c96f2
+
+        if (code === 'ncu --ver') {
+            message.channel.send('```js\n\'checking for updates...\'```')
+            
+            var upgraded = await require('npm-check-updates').run({
                 jsonUpgraded: false,
                 silent: true
-                })
-                code = upgraded
-            };
+            })
+            code = upgraded
+        };
 
-            if (message.mentions.users.first() && code.includes('--user')) code = code.replace('--user', '').replace(`<@!${message.mentions.users.first().id}>`, `yukie.users.fetch(message.mentions.users.first().id)`)
+        let result; 
+        try {
+            const evaled = await eval(code);
+            
+            result = require("util").inspect(evaled, { compact: true, depth: 0 });
+        } catch(error) {
+            hide = false
+            result = error.toString();
+        };
 
-            let result; 
-            try {
-                const evaled = await eval(code);
-
-                result = require("util").inspect(evaled, { compact: true, depth: 0 });
-            } catch(error) {
-                result = error.toString();
-            };
-
-            message.channel.send(result, { code: 'js' });
+        if (hide === false) return message.channel.send(result, { code: 'js' });
     }
 }
