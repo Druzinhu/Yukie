@@ -7,7 +7,7 @@ module.exports = async (message, yukie) => {
 	if (message.author.bot || message.channel.type === 'dm') return;
 	if (yukie.blockedUsers.includes(message.author.id)) return;
 
-	if (message.content === `<@!${yukie.user.id}>`) {
+	if (message.content === yukie.user.toString()) {
 		return message.channel.send(`🌃 | ${message.author} Meu **prefixo** é: **\`\`${prefix}\`\`**! Use **\`\`${prefix}help\`\`** para ver meus **comandos**!`)
 	}
 
