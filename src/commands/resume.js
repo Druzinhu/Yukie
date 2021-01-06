@@ -1,7 +1,7 @@
 module.exports = {
     aliase: 'retomar',
     help: '',
-    async run (yukie, message, args) {
+    async execute (yukie, message, args) {
         const queue = yukie.queues.get(message.guild.id)
         
         if (!message.member.voice.channel) return;
@@ -15,5 +15,11 @@ module.exports = {
         queue.paused = false
         queue.dispatcher.resume()
         message.channel.send(`⏸️ **Música despausada** por ${message.author}`)
+    },
+    
+    help: {
+        name: 'resume',
+        description: 'Despausa a música que está pausada',
+        usage: `${process.env.PREFIX}resume`
     }
 }

@@ -4,7 +4,7 @@ const player = require('./play').player
 module.exports = {
     aliase: 'pular',
     help: '',
-    async run (yukie, message, args, data) {
+    async execute (yukie, message, args, data) {
         const queue = yukie.queues.get(message.guild.id)
         
         if (!message.member.voice.channel) return;
@@ -61,11 +61,17 @@ module.exports = {
         }
         message.channel.send(`⏭️ **Música pulada** por ${queue.songs[0].author}`)
 
-        queue.paused = false
         queue.songs.shift();
         //yukie.queues.set(message.guild.id, queue);
         player(yukie, message, queue.songs[0]);
+        queue.paused = false
 
         queue.msg.then(m => m.delete().catch(O_o => {}));
+    },
+
+    help: {
+        name: 'skip',
+        description: 'Pula a música que está tocando',
+        usage: `${process.env.PREFIX}skip`
     }
 }

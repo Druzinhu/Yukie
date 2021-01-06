@@ -1,7 +1,7 @@
 module.exports = {
-    aliases: 'limpar',
+    aliases: 'limpar delete deletar',
     help: '',
-    async run (yukie, message, args, data) {
+    async execute (yukie, message, args, data) {
         const number = args.join(' ')
 
         if (!message.member.hasPermission("ADIMINISTRATOR")) {
@@ -10,20 +10,36 @@ module.exports = {
         
         if (!number) return message.reply(`Coloque um número de mensagens a serem excluídas!`);
 
-        if (isNaN(number)) return message.reply(`Coloque um valor de 2 a 100 para o número de mensagens a serem excluídas!`);
+        if (isNaN(number) === true) return message.reply(`Coloque um valor de 2 a 100 para o número de mensagens a serem excluídas!`);
 
         if (number < 2 || number > 100) return message.reply(`Eu só posso deletar entre 2 e 100 mensagens!`);
 
-        message.channel.messages.fetch({ limit: number }).then(msg => {
+        message.channel.messages.fetch({ limit: number })
+        .then(msg => {
             message.channel.bulkDelete(msg, true).then(ar => {
                 const deleted = ar.array().length;
-
-                if (deleted == number) {
+                //console.log(msg.size + ' - ' + number)
+                
+                if (deleted == number || !number > msg.size) {
                     return message.reply(`Chat limpo!`);
-                } else {
-                    return message.reply(`Chat limpo! Porém ${number - deleted} mensagens não foram deletadas por terem sido enviadas a mais de 2 semanas!`)
+                }
+                //else if (msg.size == number || number > msg.size) {
+                else {
+                    if (msg.size - deleted == 0) {
+                        return message.reply(`Chat limpo!`);
+                    }
+                    else {
+                        if (msg.size - deleted == 1) return message.reply(`Chat limpo! Porém 1 mensagem não foi deletada por ter sido enviada a mais de 2 semanas!`)
+                        else return message.reply(`Chat limpo! Porém ${msg.size - deleted} mensagens não puderam ser deletadas por terem sido enviadas a mais de 2 semanas!`)
+                    };
                 };
             });
         });
+    },
+
+    help: {
+        name: 'clear',
+        description: 'Apaga mensagens de um canal',
+        usage: `${process.env.PREFIX}clear <2 - 100>`
     }
 }

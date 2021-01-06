@@ -1,7 +1,7 @@
 module.exports = {
-    aliase: 'pausar parar pause',
+    aliase: 'pausar parar pause stop',
     help: '',
-    async run (yukie, message, args) {
+    async execute (yukie, message, args) {
         const queue = yukie.queues.get(message.guild.id)
 
         if (!message.member.voice.channel) return;
@@ -17,5 +17,11 @@ module.exports = {
         queue.paused = true
         queue.dispatcher.pause(/*true*/)
         message.channel.send(`▶️ **Música pausada** por ${message.author}`)
+    },
+
+    help: {
+        name: 'pause',
+        description: 'Pausa a música que está tocando',
+        usage: `${process.env.PREFIX}pause`
     }
 }

@@ -6,9 +6,8 @@ module.exports = async function search(s, message) {
     const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g)
 
     if (playlistURL) {
-        /*playlist = await youtube.getPlaylist(s)
-        videos   = await playlist.getVideos()
-        videos.author = message.author*/
+        const playlistID = s.replace(/https:\/\/www.youtube.com\/playlist\?list=/g, '')
+        
     }
     else if (videoURL) {
         result = await youtube.getVideo(s).then(r => r)

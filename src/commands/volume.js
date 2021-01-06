@@ -1,7 +1,7 @@
 module.exports = {
     aliase: 'vol',
     help: '',
-    async run (yukie, message, args) {
+    async execute (yukie, message, args) {
         let vol = args.join(' ')
         const queue = yukie.queues.get(message.guild.id);
         
@@ -12,14 +12,20 @@ module.exports = {
         if (message.author.id !== queue.songs[0].author.id) {
             return message.reply('somente o usuário que requisitou a música pode definir o volume!')
         }
-        if (isNaN(vol) || vol < 1 || vol > 100) {
+        if (isNaN(vol) === true || vol < 1 || vol > 100) {
             return message.reply('o valor do volume deve ser entre 1 e 100!')
         }
         
         vol = Math.round(vol)
 
-        queue.dispatcher.setVolume(vol / 100);
-        queue.volume = vol / 100;
+        queue.dispatcher.setVolume(vol / 10);
+        queue.volume = vol / 10;
         message.reply(`volume definido como **${vol}**`)
+    },
+
+    help: {
+        name: 'volume',
+        description: 'Define o volume da música',
+        usage: `${process.env.PREFIX}volume <1 - 100>`
     }
 }

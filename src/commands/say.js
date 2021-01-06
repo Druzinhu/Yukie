@@ -2,8 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = { 
 	aliase: 'falar',
-	help: '',
-	async run (yukie, message, args, data) {
+	async execute (yukie, message, args, data) {
 		const arg = args.join(' ')
 
 		if (!message.member.hasPermission ('ADMINISTRATOR')) {
@@ -26,5 +25,11 @@ module.exports = {
 			
 			message.channel.send(message.author, embed)
 		}
-	}
+	},
+	
+	help: {
+        name: 'say',
+        description: 'Faz com que o bot envie tal mensagem',
+        usage: `${process.env.PREFIX}say <frase>`
+    }
 }

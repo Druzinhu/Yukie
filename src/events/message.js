@@ -2,10 +2,11 @@ const Discord = require('discord.js');
 const cooldown = new Discord.Collection();
 
 const prefix = process.env.PREFIX;
-require('../util/emojis');
 
 module.exports = async (message, yukie) => {
 	if (message.author.bot || message.channel.type === 'dm') return;
+	if (yukie.blockedUsers.includes(message.author.id)) return;
+
 	if (message.content === `<@!${yukie.user.id}>`) {
 		return message.channel.send(`🌃 | ${message.author} Meu **prefixo** é: **\`\`${prefix}\`\`**! Use **\`\`${prefix}help\`\`** para ver meus **comandos**!`)
 	}
@@ -19,7 +20,6 @@ module.exports = async (message, yukie) => {
 	const data = { 
 		comando: comando,
 		prefix: prefix,
-		emojis: emojis,
 		ownerID: process.env.OWNER,
 		message: message,
 	}
@@ -39,18 +39,18 @@ module.exports = async (message, yukie) => {
 			if (!yukie.acess.includes(message.author.id)) {
 				cooldown.set(message.author.id, Date.now())
 
-				timeout = setTimeout(() => {
+				setTimeout(() => {
 					cooldown.delete(message.author.id)
-				}, 10000);
-			}
+				}, 5000);
+			};
 
 			if (commands.requireAcessPermission === true) {
 				if (yukie.acess.includes(message.author.id)) {
-					return commands.run(yukie, message, args, data);
+					return commands.execute(yukie, message, args, data);
 				} 
 				else return;
-			}
-			commands.run(yukie, message, args, data);
+			};
+			commands.execute(yukie, message, args, data);
 		};
 	};
-};
+}

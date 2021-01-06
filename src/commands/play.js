@@ -1,8 +1,10 @@
 //const Discord = require('discord.js');
-const ytdl = require('ytdl-core');
-const search = require('../util/music/search')
+const ytdl = require('ytdl-core'); // require('ytdl-core-discord')
+const search = require('../utils/discord/music/search');
 
-const run = async(yukie, message, args, data) => {
+const execute = async(yukie, message, args, data) => {
+  if (yukie.queues.get('true')) return message.channel.send('espere');
+
   if (!message.member.voice.channel) {
     return message.reply('Você precisa estar conectado em algum canal de voz!')
   };
@@ -37,14 +39,17 @@ const run = async(yukie, message, args, data) => {
           yukie.queues.set(message.guild.id, queue);
         })
       }
-      else return player(yukie, message, song);
+      else return player(yukie, message, song, data);
     }
 
     // V I D E O S
-    else if (queue) {
+    else if (queue) {      
       queue.songs.push(song);
       yukie.queues.set(message.guild.id, queue);
-    } else return player(yukie, message, song);
+    } else {
+      yukie.queues.set('true')
+      return player(yukie, message, song, data);
+    }
   }
   catch (err) {
     console.error(err);
@@ -52,7 +57,7 @@ const run = async(yukie, message, args, data) => {
   }
 };
 
-const player = async (yukie, message, song) => {
+const player = async (yukie, message, song, data) => {
   let queue = yukie.queues.get(message.member.guild.id);
 
   if (!song) {
@@ -66,7 +71,7 @@ const player = async (yukie, message, song) => {
     await yukie.queues.delete(message.member.guild.id)
   };
   //
-  const playingEmbed = require('../util/music/playingEmbed')
+  const playingEmbed = require('../utils/discord/music/playingEmbed')
   const embed = await playingEmbed(song)
   msg = message.channel.send('🎶** | Tocando agora:**', embed)
   //
@@ -95,11 +100,17 @@ const player = async (yukie, message, song) => {
   });
 
   yukie.queues.set(message.member.guild.id, queue);
+  if (yukie.queues.get('true')) yukie.queues.delete('true')
 }
 
 module.exports = {
   aliase: 'p tocar',
-  help: 'a',
-  run,
+  execute,
   player,
-}
+
+  help: {
+    name: 'play',
+    description: 'Reproduz uma música ou uma playlist em um canal de voz',
+    usage: `${process.env.PREFIX}play <nome ou url da música/playlist>`
+  }
+};
