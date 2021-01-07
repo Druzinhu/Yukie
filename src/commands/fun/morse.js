@@ -99,18 +99,18 @@ module.exports = {
 			'¿': '..-.-',
 			'¡': '--...-'
 		};
-		const array = a.replace(/ /g, '/').split("")
+		const array = a.replace(/ /g, '/').split("");
+		
 		array.forEach((l, i)=> {
 			if (l === '/') return;
-			array[i] = obj[array[i].toUpperCase()]
+			array[i] = obj[array[i].toUpperCase()];
 		});
 		
-		message.channel.send(array.join(' '))
-	},
+		message.channel.send(array.join(' '));
+	}
+}
 
-	help: {
-        name: 'morse',
-        description: 'Converte frases em código morse',
-        usage: `${process.env.PREFIX}morse <frase>`
-    }
+module.exports.help = {
+    description: 'Converte frases em código morse',
+    usage: `<frase>`
 }

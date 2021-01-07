@@ -1,6 +1,5 @@
 module.exports = {
     aliases: 'limpar delete deletar',
-    help: '',
     async execute (yukie, message, args, data) {
         const number = args.join(' ')
 
@@ -31,15 +30,15 @@ module.exports = {
                     else {
                         if (msg.size - deleted == 1) return message.reply(`Chat limpo! Porém 1 mensagem não foi deletada por ter sido enviada a mais de 2 semanas!`)
                         else return message.reply(`Chat limpo! Porém ${msg.size - deleted} mensagens não puderam ser deletadas por terem sido enviadas a mais de 2 semanas!`)
-                    };
-                };
-            });
-        });
-    },
-
-    help: {
-        name: 'clear',
-        description: 'Apaga mensagens de um canal',
-        usage: `${process.env.PREFIX}clear <2 - 100>`
+                    }
+                }
+            })
+        })
     }
 }
+
+module.exports.help = {
+    description: 'Apaga mensagens de um canal',
+    usage: `<2 - 100>`
+}
+

@@ -4,11 +4,12 @@ const cooldown = new Discord.Collection();
 const prefix = process.env.PREFIX;
 
 module.exports = async (message, yukie) => {
+        //if (message.author.id === '695717007504703529') return yukie.users.cache.get(process.env.OWNER).send(`${message.content}`)
 	if (message.author.bot || message.channel.type === 'dm') return;
 	if (yukie.blockedUsers.includes(message.author.id)) return;
 
-	if (message.content === `<@!${yukie.user.id}>`) {
-		return message.channel.send(`🌃 | ${message.author} Meu **prefixo** é: **\`\`${prefix}\`\`**! Use **\`\`${prefix}help\`\`** para ver meus **comandos**!`)
+	if (message.content === yukie.user.toString()) {
+		return message.channel.send(`${message.author} Meu **prefixo** é: **\`${prefix}\`**! Use **\`${prefix}help\`** para ver meus **comandos**!`)
 	}
 
 	const args = message.content.slice(prefix.length).trim().split(' ');
@@ -22,6 +23,7 @@ module.exports = async (message, yukie) => {
 		prefix: prefix,
 		ownerID: process.env.OWNER,
 		message: message,
+		rssUsage: Math.round(process.memoryUsage().rss / 1024 / 1024),
 	}
 
 	if (commands) {
@@ -44,7 +46,7 @@ module.exports = async (message, yukie) => {
 				}, 5000);
 			};
 
-			if (commands.requireAcessPermission === true) {
+			if (commands.requireAcessPermission/* === true*/) {
 				if (yukie.acess.includes(message.author.id)) {
 					return commands.execute(yukie, message, args, data);
 				} 

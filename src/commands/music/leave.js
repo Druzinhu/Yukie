@@ -1,5 +1,5 @@
 module.exports = {
-    aliase: 'sair',
+    aliases: 'sair',
     async execute (yukie, message, args) {
         const queue = yukie.queues.get(message.guild.id)
 
@@ -11,11 +11,11 @@ module.exports = {
         
         queue.connection.disconnect()
         yukie.queues.delete(message.guild.id)
-    },
-
-    help: {
-        name: 'leave',
-        description: 'Faz com que o bot se desconecte do canal de voz',
-        usage: `${process.env.PREFIX}leave`
     }
 }
+
+module.exports.help = {
+    description: 'Faz com que o bot se desconecte do canal de voz',
+    usage: ''
+}
+

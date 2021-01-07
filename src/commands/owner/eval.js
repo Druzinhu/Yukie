@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports = {
-    aliase: 'e',
+    aliases: 'e',
     requireAcessPermission: true,
     async execute (yukie, message, args, data) {
         let code = args.join(' ');
@@ -29,7 +29,8 @@ module.exports = {
             code = upgraded
         };
 
-        let result; 
+        let result;
+        
         try {
             const evaled = await eval(code);
             

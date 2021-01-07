@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 
 module.exports = {
-    aliases: 'latência, latency',
+    aliases: 'latência latency',
     async execute(yukie, message, args) {
         message.channel.send('** **').then(msg => {
             const embed = new Discord.MessageEmbed()
@@ -10,10 +10,9 @@ module.exports = {
             msg.edit('🏓 **Pong!**', embed)
         })
     },
+}
 
-    help: {
-        name: 'ping',
-        description: 'Obtém o ping do bot',
-        usage: `${process.env.PREFIX}ping`
-    }
+module.exports.help = {
+    description: 'Obtém o ping do bot',
+    usage: ''
 }

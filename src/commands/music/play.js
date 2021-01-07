@@ -1,6 +1,6 @@
 //const Discord = require('discord.js');
 const ytdl = require('ytdl-core'); // require('ytdl-core-discord')
-const search = require('../utils/discord/music/search');
+const search = require('../../utils/discord/music/search');
 
 const execute = async(yukie, message, args, data) => {
   if (yukie.queues.get('true')) return message.channel.send('espere');
@@ -71,7 +71,7 @@ const player = async (yukie, message, song, data) => {
     await yukie.queues.delete(message.member.guild.id)
   };
   //
-  const playingEmbed = require('../utils/discord/music/playingEmbed')
+  const playingEmbed = require('../../utils/discord/music/playingEmbed')
   const embed = await playingEmbed(song)
   msg = message.channel.send('🎶** | Tocando agora:**', embed)
   //
@@ -104,13 +104,12 @@ const player = async (yukie, message, song, data) => {
 }
 
 module.exports = {
-  aliase: 'p tocar',
+  aliases: 'p tocar',
   execute,
   player,
+}
 
-  help: {
-    name: 'play',
-    description: 'Reproduz uma música ou uma playlist em um canal de voz',
-    usage: `${process.env.PREFIX}play <nome ou url da música/playlist>`
-  }
-};
+module.exports.help = {
+  description: 'Reproduz uma música ou uma playlist em um canal de voz',
+  usage: `<nome ou url>`
+}

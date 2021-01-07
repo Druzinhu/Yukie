@@ -2,8 +2,7 @@ const Discord = require('discord.js')
 const player = require('./play').player
 
 module.exports = {
-    aliase: 'pular',
-    help: '',
+    aliases: 'pular',
     async execute (yukie, message, args, data) {
         const queue = yukie.queues.get(message.guild.id)
         
@@ -67,11 +66,10 @@ module.exports = {
         queue.paused = false
 
         queue.msg.then(m => m.delete().catch(O_o => {}));
-    },
-
-    help: {
-        name: 'skip',
-        description: 'Pula a música que está tocando',
-        usage: `${process.env.PREFIX}skip`
     }
+}
+
+module.exports.help = {
+    description: 'Pula a música que está tocando',
+    usage: ''
 }

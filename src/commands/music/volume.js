@@ -1,6 +1,5 @@
 module.exports = {
-    aliase: 'vol',
-    help: '',
+    aliases: 'vol',
     async execute (yukie, message, args) {
         let vol = args.join(' ')
         const queue = yukie.queues.get(message.guild.id);
@@ -21,11 +20,10 @@ module.exports = {
         queue.dispatcher.setVolume(vol / 10);
         queue.volume = vol / 10;
         message.reply(`volume definido como **${vol}**`)
-    },
-
-    help: {
-        name: 'volume',
-        description: 'Define o volume da música',
-        usage: `${process.env.PREFIX}volume <1 - 100>`
     }
+}
+
+module.exports.help = {
+    description: 'Define o volume da música',
+    usage: `<1 - 100>`
 }
