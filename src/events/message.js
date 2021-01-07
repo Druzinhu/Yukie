@@ -9,7 +9,11 @@ module.exports = async (message, yukie) => {
 	if (yukie.blockedUsers.includes(message.author.id)) return;
 
 	if (message.content === yukie.user.toString()) {
+<<<<<<< HEAD
 		return message.channel.send(`${message.author} Meu **prefixo** é: **\`${prefix}\`**! Use **\`${prefix}help\`** para ver meus **comandos**!`)
+=======
+		return message.channel.send(`🌃 | ${message.author} Meu **prefixo** é: **\`${prefix}\`**! Use **\`${prefix}help\`** para ver meus **comandos**!`)
+>>>>>>> 1cf36326f263cf7665a6e8a695841e809be219e6
 	}
 
 	const args = message.content.slice(prefix.length).trim().split(' ');
