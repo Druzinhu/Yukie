@@ -1,27 +1,27 @@
 //const Discord = require('discord.js');
 const ytdl = require('ytdl-core'); // require('ytdl-core-discord')
-const search = require('../../utils/discord/music/search');
+const { search } = require('../../utils/discord/music/search');
 
 const execute = async(yukie, message, args, data) => {
-  if (yukie.queues.get('true')) return message.channel.send('espere');
+  if (yukie.interval.get(`${message.guild.id}_true`)) return;
 
   if (!message.member.voice.channel) {
-    return message.reply('Você precisa estar conectado em algum canal de voz!')
-  };
+    return message.reply('Você precisa estar conectado em algum canal de voz!');
+  }
 
   if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) {
-    return message.reply('Você não está conectado no mesmo canal de voz que eu!')
-  };
+    return message.reply('Você não está conectado no mesmo canal de voz que eu!');
+  }
 
-  if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.')
+  if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.');
 
   try {
-    const song = await search(args.join(' '), message)
+    const song = await search(yukie, message, args.join(' '));
     if (song === false) return;
     
     if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
-      if (yukie.queues.get(message.guild.id).msg != null) yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}))
-      await yukie.queues.delete(message.member.guild.id)
+      if (yukie.queues.get(message.guild.id).msg != null) yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}));
+      await yukie.queues.delete(message.member.guild.id);
     }
 
     let queue = yukie.queues.get(message.guild.id);
@@ -29,13 +29,14 @@ const execute = async(yukie, message, args, data) => {
     // P L A Y L I S T
     if (song.Playlist) {
       if (!queue) {
+        yukie.interval.set(`${message.guild.id}_true`, true);
         await player(yukie, message, song);
-        if (song._videos.length >= 2) videos = song._videos.filter(v => v.url !== song.url)
+        if (song._videos.length >= 2) videos = song._videos.filter(v => v.url !== song.url);
       }
       if (yukie.queues.get(message.guild.id) && videos) {
         return videos.map(song => {
-          queue = yukie.queues.get(message.guild.id)
-          queue.songs.push(song) 
+          queue = yukie.queues.get(message.guild.id);
+          queue.songs.push(song);
           yukie.queues.set(message.guild.id, queue);
         })
       }
@@ -47,33 +48,33 @@ const execute = async(yukie, message, args, data) => {
       queue.songs.push(song);
       yukie.queues.set(message.guild.id, queue);
     } else {
-      yukie.queues.set('true')
+      yukie.interval.set(`${message.guild.id}_true`, true);
       return player(yukie, message, song, data);
     }
   }
   catch (err) {
     console.error(err);
-    message.channel.send(err)
+    message.channel.send('Erro ao reproduzir música: ' + err);
   }
-};
+}
 
 const player = async (yukie, message, song, data) => {
   let queue = yukie.queues.get(message.member.guild.id);
 
   if (!song) {
     if (queue) {
-      queue.connection.disconnect()
-      return yukie.queues.delete(message.member.guild.id)
+      queue.connection.disconnect();
+      return yukie.queues.delete(message.member.guild.id);
     }
-  };
+  }
   if (queue && message.guild.me.voice.channel === null) {
-    if (queue.msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}))
-    await yukie.queues.delete(message.member.guild.id)
-  };
+    if (queue.msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}));
+    await yukie.queues.delete(message.member.guild.id);
+  }
   //
-  const playingEmbed = require('../../utils/discord/music/playingEmbed')
-  const embed = await playingEmbed(song)
-  msg = message.channel.send('🎶** | Tocando agora:**', embed)
+  const { playingEmbed } = require('../../utils/discord/music/playingEmbed');
+  const embed = await playingEmbed(song);
+  msg = message.channel.send('🎶** | Tocando agora:**', embed);
   //
   if (!queue) {
     const conn = await message.member.voice.channel.join();
@@ -85,8 +86,8 @@ const player = async (yukie, message, song, data) => {
       paused: false,
       guild: message.guild,
       msg: msg,
-    };
-  };
+    }
+  }
   queue.dispatcher = await queue.connection.play(
     await ytdl(song.url, { highWaterMark: 1 << 25, filter: 'audioonly' }),
       /*{
@@ -100,7 +101,8 @@ const player = async (yukie, message, song, data) => {
   });
 
   yukie.queues.set(message.member.guild.id, queue);
-  if (yukie.queues.get('true')) yukie.queues.delete('true')
+
+  if (yukie.interval.get(`${message.guild.id}_true`)) yukie.interval.delete(`${message.guild.id}_true`);
 }
 
 module.exports = {

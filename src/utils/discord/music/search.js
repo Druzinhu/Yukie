@@ -2,20 +2,22 @@ const YouTube = require('simple-youtube-api');
 const youtube = new YouTube(process.env.YOUTUBE_API_KEY)
 const Discord = require('discord.js')
 
-module.exports = async function search(s, message) {
-    const playlistURL = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g)
-    const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g)
+module.exports.search = async function(yukie, message, s) {
+    if (yukie.queues.get(`${message.guild.id}_true`)) return song = false;
+
+    const playlistURL = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g);
+    const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g);
 
     if (playlistURL) {
-        playlist = await youtube.getPlaylist(s)
-        videos   = await playlist.getVideos()
-        videos.author = message.author
+        playlist = await youtube.getPlaylist(s);
+        videos   = await playlist.getVideos();
+        videos.author = message.author;
     }
     else if (videoURL) {
-        result = await youtube.getVideo(s).then(r => r)
+        result = await youtube.getVideo(s).then(r => r);
     }
     else {
-        result = await youtube.searchVideos(s, 1).then(r => r[0])
+        result = await youtube.searchVideos(s, 1).then(r => r[0]);
     };
     if (playlistURL) {
         song = {
@@ -54,7 +56,7 @@ module.exports = async function search(s, message) {
         .setURL(playlist.url)
         .setThumbnail(playlist.thumbnails.medium.url)
         //console.log(playlist)
-        message.channel.send('**<:yt:785493083546320916> | Playlist adicionada:**', embed)
+        message.channel.send('**<:yt:785493083546320916> | Playlist adicionada:**', embed);
     }
     else {
         const embed = new Discord.MessageEmbed()
@@ -63,7 +65,8 @@ module.exports = async function search(s, message) {
         .setColor(process.env.DEFAULT_COLOR)
         .setURL(result.url)
         .setImage(result.thumbnails.medium.url)
-        message.channel.send(`**<:yt:785493083546320916> | Música adicionada:**`, embed)
+
+        message.channel.send(`**<:yt:785493083546320916> | Música adicionada:**`, embed);
     }
-    return song
+    return song;
 }

@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const ytsearch = require('yt-search')
 
-module.exports = async function playerEmbed(song) {
+module.exports.playingEmbed = async function(song) {
     var toHHmmss = (secs) => {
         var sec_num = parseInt(secs, 10)
         var hour    = Math.floor(sec_num / 3600)
@@ -13,6 +13,7 @@ module.exports = async function playerEmbed(song) {
         .filter((v, i) => v !== "00" || i > 0)
         .join(':')
     }
+    
     song.duration = (await ytsearch( { videoId: song.id })).seconds
     duration = toHHmmss(song.duration)
 

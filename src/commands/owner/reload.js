@@ -27,7 +27,7 @@ module.exports = {
             message.channel.send(`O reload do comando \`${commandName}\` foi bem sucedido!`)
         } catch (error) {
             console.error(error);
-            message.channel.send(`Ocorreu um erro ao dar reload no comando \`${commandName}\`: \n\`${error.message}\``)
+            message.channel.send(`Ocorreu um erro ao dar reload no comando \`${commandName}\`:\n\`${error}\``)
         }
     }
 }

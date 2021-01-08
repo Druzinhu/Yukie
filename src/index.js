@@ -8,9 +8,10 @@ require('dotenv').config();
 yukie.blockedUsers = ['']
 yukie.acess = ['748320609746026607', '451920956768649226'];
 yukie.commands = new Map();
+yukie.interval = new Map();
 yukie.aliases = new Map();
 yukie.queues = new Map();
-//yukie.categories = readdirSync("src/commands")
+
 readdirSync('src/commands').forEach(category => {
 	const commands = readdirSync(`./src/commands/${category}/`).filter(file => file.endsWith(".js"))
 	
@@ -25,10 +26,10 @@ readdirSync('src/commands').forEach(category => {
 				yukie.aliases.set(aliase, commandFile);
 				console.log('Carregando aliase: ' + aliase);
 			});
-		};
+		}
 		yukie.commands.set(commandName, commandFile);
 		console.log('Carregando comando: ' + commandName);
-	};
+	}
 });
 
 readdirSync('src/events').forEach(f => {
