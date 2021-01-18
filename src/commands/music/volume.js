@@ -6,13 +6,13 @@ module.exports = {
         
         if (!message.member.voice.channel) return;
         if (!queue) {
-            return message.reply('não estou reproduzindo nenhuma música no momento!')
+            return message.channel.send('Não estou reproduzindo nenhuma música no momento!')
         }
         if (message.author.id !== queue.songs[0].author.id) {
-            return message.reply('somente o usuário que requisitou a música pode definir o volume!')
+            return message.channel.send('Somente o usuário que requisitou a música pode definir o volume!')
         }
         if (isNaN(vol) === true || vol < 1 || vol > 100) {
-            return message.reply('o valor do volume deve ser entre 1 e 100!')
+            return message.channel.send('O valor do volume deve ser entre 1 e 100!')
         }
         
         vol = Math.round(vol)
@@ -24,6 +24,7 @@ module.exports = {
 }
 
 module.exports.help = {
+    category: 'music',
     description: 'Define o volume da música',
     usage: `<1 - 100>`
 }

@@ -1,3 +1,3 @@
 module.exports = async (error, yukie) => {
-   console.error(error)
+   console.error(error);
 }

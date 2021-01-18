@@ -38,6 +38,7 @@ module.exports = {
 }
 
 module.exports.help = {
+    category: 'moderation',
     description: 'Apaga mensagens de um canal',
     usage: `<2 - 100>`
 }

@@ -28,6 +28,7 @@ module.exports = {
 }
 
 module.exports.help = {
+	category: 'other',
     description: 'Mostra todos os comandos disponíveis do bot',
     usage: ''
 }

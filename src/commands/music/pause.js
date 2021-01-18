@@ -5,12 +5,12 @@ module.exports = {
 
         if (!message.member.voice.channel) return;
         if (!queue) { 
-            return message.reply('não estou reproduzindo nenhuma música no momento!') 
+            return message.channel.send('Não estou reproduzindo nenhuma música no momento!') 
         }
         if (message.member.voice.channel !== message.guild.me.voice.channel) return; 
 
         if (queue.paused) {
-            message.reply('a música já está pausada!')
+            message.channel.send('A música já está pausada!');
         }
 
         queue.paused = true
@@ -20,6 +20,7 @@ module.exports = {
 }
 
 module.exports.help = {
+    category: 'music',
     description: 'Pausa a música que está tocando',
     usage: ''
 }

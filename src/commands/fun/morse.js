@@ -111,6 +111,7 @@ module.exports = {
 }
 
 module.exports.help = {
+	category: 'fun',
     description: 'Converte frases em código morse',
     usage: `<frase>`
 }

@@ -41,3 +41,7 @@ module.exports = {
         if (hide === false) return message.channel.send(result, { code: 'js' });
     }
 }
+
+module.exports.help = { 
+    category: 'developer',
+}

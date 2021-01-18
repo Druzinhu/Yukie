@@ -5,7 +5,7 @@ const { readdirSync } = require('fs');
 require('dotenv').config();
 
 //yukie.startTime = Date.now()
-yukie.blockedUsers = ['']
+yukie.blockedUsers = [''];
 yukie.acess = ['748320609746026607', '451920956768649226'];
 yukie.commands = new Map();
 yukie.interval = new Map();

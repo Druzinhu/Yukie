@@ -13,6 +13,7 @@ module.exports = {
 }
 
 module.exports.help = {
+	category: 'other',
     description: 'Obtém o ping do bot',
     usage: ''
 }

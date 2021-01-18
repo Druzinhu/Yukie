@@ -7,6 +7,7 @@ module.exports = {
 }
 
 module.exports.help = {
+    category: 'moderation',
     description: 'Bane um usuário permanentemente do servidor',
     usage: `<usuário> <motivo>`
 }

@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-module.exports = { 
+module.exports = {
 	aliases: 'falar',
 	async execute (yukie, message, args, data) {
 		const arg = args.join(' ')
@@ -29,6 +29,7 @@ module.exports = {
 }
 
 module.exports.help = {
+    category: 'moderation',
     description: 'Faz com que o bot envie tal mensagem',
     usage: `<frase>`
 }
