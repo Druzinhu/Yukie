@@ -12,7 +12,7 @@ module.exports = async (yukie) => {
 	}
 
 	var guildQueue = (queues) => {
-		if (queues.size > 0) {
+		if (queues.size > 0 && queues.songs) {
 			const queue = queues.get([...queues.keys()][Math.floor(Math.random() * queues.size)]);
 			return `${queue.songs[0].title}! Música requisitada por ${queue.songs[0].author.tag}`;
 		}

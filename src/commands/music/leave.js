@@ -2,17 +2,20 @@ module.exports = {
     aliases: 'sair',
     async execute (yukie, message, args) {
         const queue = yukie.queues.get(message.guild.id);
+        const voiceChannel = message.member.voice.channel;
+        const meVoiceChannel = message.guild.me.voice.channel;
 
-        if (!message.guild.me.voice.channel) return message.channel.send(`<emoji> Não estou conectada em nenhum canal de voz!`);
-        if (!message.member.voice.channel || !queue) return;
-        if (message.member.voice.channel !== message.guild.me.voice.channel) return message.channel.send('<emoji> Você não está conectado no mesmo canal de voz que eu!')
+        if (!meVoiceChannel) return message.queue.send("bot_not_connected");
+        if (voiceChannel !== meVoiceChannel || !voiceChannel) return message.queue.send("different_connection")
 
-        //if (queue.msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}));
-        
-        message.channel.send('**Desconectando...**');
-        queue.connection.disconnect();
-        yukie.queues.delete(message.guild.id);
-        //message.react('<:okay:758047626997530694>')
+        message.channel.send('**📤 Deconectando...**');
+
+        if (queue) { 
+            queue.connection.disconnect();
+            return yukie.queues.delete(message.guild.id);
+        }
+
+        voiceChannel.leave();
     }
 }
 

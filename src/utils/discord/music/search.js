@@ -2,7 +2,7 @@ const YouTube = require('simple-youtube-api');
 const youtube = new YouTube(process.env.YOUTUBE_API_KEY);
 const Discord = require('discord.js');
 
-module.exports.search = async function(yukie, message, s) {
+module.exports = async function search(yukie, message, s) {
     if (yukie.queues.get(`${message.guild.id}_play`)) return song = false;
 
     message.channel.send('**🔎 Pesquisando...**');
@@ -14,7 +14,6 @@ module.exports.search = async function(yukie, message, s) {
         playlist = await youtube.getPlaylist(s);
         videos   = await playlist.getVideos();
         videos.author = message.author;
-        //videos.thumbnail = videos.thumbnails.medium.url
     }
     else if (videoURL) {
         result = await youtube.getVideo(s).then(r => r);
@@ -25,7 +24,7 @@ module.exports.search = async function(yukie, message, s) {
 
     if (playlistURL) {
         song = {
-            _videos: videos,
+            videos,
             _playlist: playlist,
             Playlist: true,
             author: message.author,
@@ -51,6 +50,7 @@ module.exports.search = async function(yukie, message, s) {
         song.play = false
         return message.reply('eu não reproduzo músicas com mais de 10 horas!')
     };*/
+    await message.member.voice.channel.join()
 
     if (!message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
         message.channel.send('Preciso da permissão de **inserir links** para poder enviar **embeds**!');
@@ -78,5 +78,6 @@ module.exports.search = async function(yukie, message, s) {
 
         message.channel.send(`**<:yt:785493083546320916> Música adicionada:** \`${song.title}\``);
     }
+    
     return song;
 }

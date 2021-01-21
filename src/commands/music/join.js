@@ -1,26 +1,28 @@
 module.exports = {
     aliases: 'entrar',
     async execute(yukie, message) {
-        const queue = yukie.queues.get(message.guild.id)
+        const queue = yukie.queues.get(message.guild.id);
+        const memberVoiceChannel = message.member.voice.channel;
+        const meVoiceChannel = message.guild.me.voice.channel;
+
+        if (meVoiceChannel && memberVoiceChannel.id === meVoiceChannel.id) return message.channel.send('**❌ Já estou conectada neste canal de voz!**');
 
         if (queue) {
             const membersize = message.guild.me.voice.channel.members.filter(m => !m.user.bot).size;
 
-            if (membersize == 0) {
-                queue.connection.disconnect();
-
-                message.member.voice.channel.join();
+            if (membersize === 0) {
+                message.channel.send(`**📥 Conectando em \`${memberVoiceChannel.name}\`**`);
+                
+                await memberVoiceChannel.join();
                 queue.dispatcher.resume();
+                return queue.paused = false;
             }
-            else /*if (membersize > 0)*/ return;
+            else return message.channel.send('**❌ Desculpe, mas já estou conectada em um canal de voz!**');
         }
-        else if (!queue) {
-            const queueDelete = yukie.timeout.get(`${message.guild.id}_queueDelete`)
 
-            if (queueDelete) {
-                message.member.voice.channel.join();
-            }
-        }
+        message.channel.send(`**📥 Conectando em \`${memberVoiceChannel.name}\`**`);
+        await memberVoiceChannel.join();
+        queue.dispatcher.resume();
     }
 }
 

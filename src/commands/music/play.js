@@ -1,18 +1,21 @@
 //const Discord = require('discord.js');
 const ytdl = require('ytdl-core'); // require('ytdl-core-discord')
-const { search } = require('../../utils/discord/music/search');
+const search = require('../../utils/discord/music/search');
 
 const execute = async(yukie, message, args, data) => {
+  const memberVoiceChannel = message.member.voice.channel;
+  let meVoiceChannel = message.guild.me.voice.channel;
+
   if (yukie.interval.get(`${message.guild.id}_play`)) return;
   
-  if (!message.member.voice.channel) {
-    return message.reply('Você precisa estar conectado em algum canal de voz!');
+  if (!memberVoiceChannel) {
+    return message.queue.send("not_connected");
   }
-  if (message.guild.me.voice.channel && message.member.voice.channel.id !== message.guild.me.voice.channel.id) {
-    return message.reply('Você não está conectado no mesmo canal de voz que eu!');
+  if (meVoiceChannel && memberVoiceChannel.id !== meVoiceChannel.id && message.guild.me.voice.channel.members.filter(m => !m.user.bot).size > 0) {
+    return message.queue.send("different_connection");
   }
 
-  const permissions = message.member.voice.channel.permissionsFor(yukie.user.id);
+  const permissions = memberVoiceChannel.permissionsFor(yukie.user.id);
 
   if (!permissions.has(['CONNECT'])) return message.reply('Eu não tenho permissão para **conectar** nesse canal de voz!')
   if (!permissions.has(['SPEAK'])) return message.reply('Eu não tenho permissão para **falar** nesse canal de voz!')
@@ -22,10 +25,10 @@ const execute = async(yukie, message, args, data) => {
     
     var song = await search(yukie, message, args.join(' '));
     if (song === false) return;
-    
+
     if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
-      if (yukie.queues.get(message.guild.id).msg != null) yukie.queues.get(message.guild.id).msg.then(m => m.delete().catch(O_o => {}));
-      await yukie.queues.delete(message.guild.id);
+      await message.member.voice.channel.join();
+      yukie.queues.get(message.guild.id).dispatcher.resume();
     }
 
     let queue = yukie.queues.get(message.guild.id);
@@ -71,7 +74,7 @@ const execute = async(yukie, message, args, data) => {
           }
           queue.songs.push(_song);
         }
-      } //else return player(yukie, message, song); 
+      }
     }
 
     // V I D E O S
@@ -93,12 +96,8 @@ const player = async (yukie, message, song) => {
 
   if (!song) {
     if (queue) {
-      setTimeout(() => {
-        if (song) return;
-
-        queue.connection.disconnect();
-        yukie.queues.delete(message.member.guild.id);
-      }, 300000)
+      queue.connection.disconnect();
+      return yukie.queues.delete(message.member.guild.id);
     }
   }
   if (queue && message.guild.me.voice.channel === null) {
@@ -107,12 +106,11 @@ const player = async (yukie, message, song) => {
   }
   //
   if (message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
-    const { playingEmbed } = require('../../utils/discord/music/playingEmbed');
-    const embed = await playingEmbed(song);
+    const playing = require('../../utils/discord/music/playingEmbed');
+    const embed = await playing(song);
 
-    msg = message.channel.send(embed);
+    message.channel.send('**🎧 Tocando agora:**', embed);
   }
-  else msg = null;
   //
   if (!queue) {
     const conn = await message.member.voice.channel.join();
@@ -123,7 +121,6 @@ const player = async (yukie, message, song) => {
       songs: [song],
       paused: false,
       guild: message.guild,
-      msg: msg,
     }
   }
   queue.dispatcher = await queue.connection.play(
@@ -135,11 +132,9 @@ const player = async (yukie, message, song) => {
   .on("finish", () => {
     queue.songs.shift();
     player(yukie, message, queue.songs[0]);
-    //if (queue.msg !== null) msg.then(m => m.delete().catch(O_o => {}))
   });
 
   yukie.queues.set(message.member.guild.id, queue);
-
   if (yukie.interval.get(`${message.guild.id}_play`)) yukie.interval.delete(`${message.guild.id}_play`);
 }
 

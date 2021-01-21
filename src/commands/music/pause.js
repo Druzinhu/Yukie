@@ -4,13 +4,11 @@ module.exports = {
         const queue = yukie.queues.get(message.guild.id)
 
         if (!message.member.voice.channel) return;
-        if (!queue) { 
-            return message.channel.send('Não estou reproduzindo nenhuma música no momento!') 
-        }
-        if (message.member.voice.channel !== message.guild.me.voice.channel) return; 
+        if (!queue) return message.queue.send("no_queue");
+        if (message.member.voice.channel !== message.guild.me.voice.channel) return message.queue.send("different_connection"); 
 
         if (queue.paused) {
-            message.channel.send('A música já está pausada!');
+            return message.channel.send('**❌ A música já está pausada!**');
         }
 
         queue.paused = true

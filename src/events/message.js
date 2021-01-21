@@ -1,22 +1,31 @@
 const Discord = require('discord.js');
 const cooldown = new Discord.Collection();
 
+const queueMessages = require('../utils/discord/queueMessages');
 const reply = require('../strc/yukieReply');
 const prefix = process.env.PREFIX;
-//require('../utils/discord/ExtendedMessage'); inlineReply
 
 module.exports = async (message, yukie) => {
 	if (message.author.bot || message.channel.type === 'dm' || yukie.blockedUsers.includes(message.author.id)) return;
-	if (message.content === yukie.user.toString()) {
-		return message.channel.send(`${message.author} Meu **prefixo** é: **\`${prefix}\`**! Use **\`${prefix}help\`** para ver meus **comandos**!`);
+	if (message.content === `<@!${yukie.user.id}>`) {
+		return message.channel.send(`✨ **| ${message.author} Meu prefixo é: \`${prefix}\`!** Use **\`${prefix}help\`** para ver meus **comandos**!`);
 	}
+	
 	const args = message.content.slice(prefix.length).trim().split(' ');
 	const comando = args.shift().toLowerCase();
 	
 	if (!message.content.startsWith(prefix+comando)) return; 
 	
 	const commands = yukie.commands.get(comando) || yukie.aliases.get(comando);
+
+	function send(selected) {
+		const msg = queueMessages[selected];
+		return message.channel.send(`${msg ? msg : undefined}`);
+	}
+	message.queue = { messages: queueMessages, send: send, };
+
 	reply.start();
+
 	const data = {
 		comando: comando,
 		prefix: prefix,

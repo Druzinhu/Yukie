@@ -1,5 +1,5 @@
-const Discord = require('discord.js')
-const yukie = new Discord.Client()
+const Discord = require('discord.js');
+const yukie = new Discord.Client();
 
 const { readdirSync } = require('fs');
 require('dotenv').config();

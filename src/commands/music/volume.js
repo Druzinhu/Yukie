@@ -5,9 +5,7 @@ module.exports = {
         const queue = yukie.queues.get(message.guild.id);
         
         if (!message.member.voice.channel) return;
-        if (!queue) {
-            return message.channel.send('Não estou reproduzindo nenhuma música no momento!')
-        }
+        if (!queue) return message.queue.send("no_queue")
         if (message.author.id !== queue.songs[0].author.id) {
             return message.channel.send('Somente o usuário que requisitou a música pode definir o volume!')
         }
@@ -19,7 +17,7 @@ module.exports = {
 
         queue.dispatcher.setVolume(vol / 10);
         queue.volume = vol / 10;
-        message.reply(`volume definido como **${vol}**`)
+        message.channel.send(`🔊 Volume definido como **${vol}**`)
     }
 }
 
