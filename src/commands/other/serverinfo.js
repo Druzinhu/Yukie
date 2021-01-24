@@ -18,8 +18,7 @@ module.exports = {
 			{ name: `📥 Entrei em`, value: `\`${moment(message.guild.me.joinedAt).format('DD/MM/YY, [às] HH:mm:ss')}\``, inline: true }
 		)
 		
-		message.channel.send(message.author, embed)
-		if (message.author.id === data.ownerID) message.reply('Não esquece de criar os emojis!!!')
+		message.channel.send(message.author, embed);
 	}
 }
 module.exports.help = {

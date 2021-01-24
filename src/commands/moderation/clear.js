@@ -1,5 +1,5 @@
 module.exports = {
-    aliases: 'limpar delete deletar',
+    aliases: 'limpar',
     async execute (yukie, message, args, data) {
         const number = args.join(' ')
 
@@ -17,12 +17,10 @@ module.exports = {
         .then(msg => {
             message.channel.bulkDelete(msg, true).then(ar => {
                 const deleted = ar.array().length;
-                //console.log(msg.size + ' - ' + number)
                 
                 if (deleted == number || !number > msg.size) {
                     return message.reply(`Chat limpo!`);
                 }
-                //else if (msg.size == number || number > msg.size) {
                 else {
                     if (msg.size - deleted == 0) {
                         return message.reply(`Chat limpo!`);

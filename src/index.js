@@ -1,42 +1,41 @@
 const Discord = require('discord.js');
 const yukie = new Discord.Client();
 
-const { readdirSync } = require('fs');
+const fs = require('fs');
 require('dotenv').config();
 
-//yukie.startTime = Date.now()
-yukie.blockedUsers = [''];
 yukie.acess = ['748320609746026607', '451920956768649226'];
+yukie.blockedUsers = [];
 yukie.commands = new Map();
-yukie.interval = new Map();
 yukie.aliases = new Map();
+yukie.interval = new Map();
 yukie.queues = new Map();
 
-readdirSync('src/commands').forEach(category => {
-	const commands = readdirSync(`./src/commands/${category}/`).filter(file => file.endsWith(".js"))
+fs.readdirSync('src/commands').forEach(category => {
+	const commands = fs.readdirSync(`./src/commands/${category}/`).filter(file => file.endsWith(".js"));
 	
 	for (let file of commands) {
-		const commandFile = require(`./commands/${category}/${file}`);
+		const command = require(`./commands/${category}/${file}`);
 		const commandName = file.replace(/.js/g, '');
 
-		if(commandFile.aliases) { 
-			const aliases = commandFile.aliases.split(" ");
+		if(command.aliases) { 
+			const aliases = command.aliases.split(" ");
 
 			aliases.forEach(aliase => {
-				yukie.aliases.set(aliase, commandFile);
+				yukie.aliases.set(aliase, command);
 				console.log('Carregando aliase: ' + aliase);
 			});
 		}
-		yukie.commands.set(commandName, commandFile);
+		yukie.commands.set(commandName, command);
 		console.log('Carregando comando: ' + commandName);
 	}
 });
 
-readdirSync('src/events').forEach(f => {
-	const eventFile = require(`./events/${f}`);
+fs.readdirSync('src/events').forEach(f => {
+	const event = require(`./events/${f}`);
 	const eventName = f.replace(/.js/g, '');
 
-	yukie.on(eventName, (...args) => eventFile(...args, yukie))
+	yukie.on(eventName, (...args) => event(...args, yukie));
 	console.log('Carregando evento: ' + eventName);
 });
 

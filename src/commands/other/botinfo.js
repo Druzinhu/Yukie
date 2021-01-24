@@ -1,7 +1,4 @@
 const Discord = require('discord.js');
-//const moment = require('moment');
-//moment.locale('pt-br')
-
 module.exports = {
 	async execute(yukie, message, args, data) {
 		const embed = new Discord.MessageEmbed()
@@ -17,10 +14,7 @@ module.exports = {
 			{ name: `📆 Fui criada em`, value: `\`26/08/20, às 11:58:05\``, inline: true } //${moment(yukie.user.createdAt).format('DD/MM/YY, [às] hh:mm:ss')}
 		);
 
-		message.channel.send(message.author, embed)
-		/*.then(m => {
-			m.react('')
-		})*/
+		message.channel.send(message.author, embed);
 	}
 }
 

@@ -8,22 +8,22 @@ module.exports = {
         .setColor(process.env.DEFAULT_COLOR)
 
         readdirSync('src/commands').forEach(category => {
-            const commands = readdirSync(`./src/commands/${category}/`).filter(file => file.endsWith(".js"))
+            const commands = readdirSync(`./src/commands/${category}/`).filter(file => file.endsWith(".js"));
             
             for (let file of commands) {
                 const commandName = file.replace(/.js/g, '');
 
-                const commands = yukie.commands.get(commandName)
+                const commands = yukie.commands.get(commandName);
 
-                if (!commands.help) return
+                if (!commands.help.description) return;
 
                 embed.fields.push({
                     name: commandName,
-                    value: `Descrição: \`${commands.help.description}\`\nComo usar: \`${data.prefix + commandName} ${commands.help.usage}\``
+                    value: `Descrição: \`${commands.help.description}\`\nComo usar: \`${data.prefix + commandName} ${commands.help.usage}\``,
                 })
             }
         });
-        message.channel.send(embed)
+        message.channel.send(embed);
     },
 }
 

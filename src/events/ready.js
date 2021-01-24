@@ -16,7 +16,7 @@ module.exports = async (yukie) => {
 			const queue = queues.get([...queues.keys()][Math.floor(Math.random() * queues.size)]);
 			return `${queue.songs[0].title}! Música requisitada por ${queue.songs[0].author.tag}`;
 		}
-		else return 'Biffe - Bubbaloo! Música requisitada por mim';
+		else return 'Biffe - Bubbaloo!';
 	}
 
 	function activities(selected) {
@@ -33,7 +33,7 @@ module.exports = async (yukie) => {
 			activity = `Estou online em ${yukie.guilds.cache.size} servidores!`, status = 'PLAYING';
 		}
 		else if (selected == 3) {
-			activity = `Veja meu repositório no Github! https://github.com/Druzinhu/Yukie-Bot`, status = 'PLAYING';
+			activity = `Veja meu source no Github! https://github.com/Druzinhu/Yukie`, status = 'PLAYING';
 		}
 		else if (selected == 4) {
 			activity = `Utilize ${process.env.PREFIX}play para reproduzir uma música!`, status = 'PLAYING';
@@ -42,14 +42,13 @@ module.exports = async (yukie) => {
 			activity = yukieUptime(), status = 'PLAYING';
 		}
 		else if (selected == 6) {
-			activity = `Gato é meu animal favorito! 🥰`, status = 'WATCHING';
+			activity = `🐱 Gato é meu animal favorito! 🥰`, status = 'WATCHING';
 		}
 
 		yukie.user.setActivity(activity, { type: status });
 	} 
 
 	activities(6);
-
 	let i = 0;
 
 	setInterval(() => {

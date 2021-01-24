@@ -3,15 +3,16 @@ const Discord = require('discord.js');
 module.exports = {
 	aliases: 'falar',
 	async execute (yukie, message, args, data) {
-		const arg = args.join(' ')
+		const msg = args.join(' ')
 
 		if (!message.member.hasPermission ('ADMINISTRATOR')) {
-			return message.reply('você não tem permissão para executar este comando! Para executá-lo, você precisa ter a permissão de `administrador`!')
+			return message.yukieReply('x', 'você não tem permissão para executar este comando! Para executá-lo, você precisa ter a permissão de `administrador`!')
 		}
-		if (arg) {
-			message.delete().catch(O_o => {})
-			return message.channel.send(arg)
+		if (msg) {
+			message.delete().catch(O_o => {});
+			message.channel.send(msg);
 		}
+		
 		else {
 			let embed = new Discord.MessageEmbed()
 			.setColor('RANDOM')
@@ -23,7 +24,7 @@ module.exports = {
 			.setFooter(`Executado por ${message.author.tag}`, message.author.avatarURL())
 			.setTimestamp()
 			
-			message.channel.send(message.author, embed)
+			message.channel.send(message.author, embed);
 		}
 	}
 }

@@ -1,6 +1,5 @@
-//const Discord = require('discord.js');
 const ytdl = require('ytdl-core'); // require('ytdl-core-discord')
-const search = require('../../utils/discord/music/search');
+const search = require('../../utils/music/search');
 
 const execute = async(yukie, message, args, data) => {
   const memberVoiceChannel = message.member.voice.channel;

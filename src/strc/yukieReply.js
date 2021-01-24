@@ -1,5 +1,5 @@
 const { Message } = require('discord.js');
-const emotes = require('./emojis');
+const emotes = require('../utils/emojis');
 
 module.exports = class yukieReply {
     static start() {

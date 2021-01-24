@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports = {
-    aliases: 'e',
+    aliases: 'e ev',
     requireAcessPermission: true,
     async execute (yukie, message, args, data) {
         let code = args.join(' ');
@@ -43,5 +43,5 @@ module.exports = {
 }
 
 module.exports.help = { 
-    category: 'developer',
+    category: 'dev',
 }

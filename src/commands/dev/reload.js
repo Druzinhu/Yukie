@@ -1,4 +1,3 @@
-//const { readdirSync } = require('fs')
 module.exports = {
     requireAcessPermission: true,
     async execute (yukie, message, args, data) {
