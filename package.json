@@ -9,7 +9,6 @@
   },
   "keywords": [],
   "author": "Dru",
-  "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "discord.js": "^12.5.1",
