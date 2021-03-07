@@ -1,28 +1,26 @@
+const Discord = require("discord.js");
 const ytdl = require('ytdl-core'); // require('ytdl-core-discord')
 const search = require('../../utils/music/search');
 
 const execute = async(yukie, message, args, data) => {
-  const memberVoiceChannel = message.member.voice.channel;
-  let meVoiceChannel = message.guild.me.voice.channel;
-
   if (yukie.interval.get(`${message.guild.id}_play`)) return;
+
+  const memberVoiceChannel = message.member.voice.channel;
+  const meVoiceChannel = message.guild.me.voice.channel;
   
-  if (!memberVoiceChannel) {
-    return message.queue.send("not_connected");
-  }
+  if (!memberVoiceChannel) return message.queue.send("not_connected");
   if (meVoiceChannel && memberVoiceChannel.id !== meVoiceChannel.id && message.guild.me.voice.channel.members.filter(m => !m.user.bot).size > 0) {
     return message.queue.send("different_connection");
   }
 
-  const permissions = memberVoiceChannel.permissionsFor(yukie.user.id);
+  if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.');
 
-  if (!permissions.has(['CONNECT'])) return message.reply('Eu não tenho permissão para **conectar** nesse canal de voz!')
-  if (!permissions.has(['SPEAK'])) return message.reply('Eu não tenho permissão para **falar** nesse canal de voz!')
+  const permissions = memberVoiceChannel.permissionsFor(yukie.user.id);
+  if (!permissions.has(['CONNECT'])) return message.reply('Eu não tenho permissão para **conectar** nesse canal de voz!');
+  if (!permissions.has(['SPEAK'])) return message.reply('Eu não tenho permissão para **falar** nesse canal de voz!');
 
   try {
-    if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.');
-    
-    var song = await search(yukie, message, args.join(' '));
+    const song = await search(yukie, message, args.join(' '));
     if (song === false) return;
 
     if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
@@ -33,45 +31,25 @@ const execute = async(yukie, message, args, data) => {
     let queue = yukie.queues.get(message.guild.id);
 
     // P L A Y L I S T
-    if (song.Playlist) {
+    if (song.hasPlaylist) {
+      const songlength = song.videos.length;
+      let songs;
+
       if (!queue) {
         yukie.interval.set(`${message.guild.id}_play`, true);
-        const videos = song._videos[0];
-
-        const _song = {
-          title: videos.title,
-          author: song.author,
-          url: videos.url,
-          id: videos.id,
-          thumbnail: videos.thumbnails.medium.url,
-        }
-
-        await player(yukie, message, _song);
+        await player(yukie, message, song.videos[0]);
         songs = true;
       }
 
-      if (yukie.queues.get(message.guild.id)) {
-        if (song._videos.length === 0) return;
-
-        let songslength = song._videos.length - 1;
-        let n = 0;
-
+      if (yukie.queues.get(message.guild.id) && songlength > 1) {
+        let i = 0;
+        
         if (songs) {
-          n = 1, songs = false;
+          i = 1, songs = false;
         }
 
-        for (let i = n; i <= songslength; i++) {
-          queue = yukie.queues.get(message.guild.id);
-          const videos = song._videos[i];
-
-          const _song = {
-            title: videos.title,
-            author: song.author,
-            url: videos.url,
-            id: videos.id,
-            thumbnail: videos.thumbnails.medium.url,
-          }
-          queue.songs.push(_song);
+        for (i; i < songlength; i++) {
+          yukie.queues.get(message.guild.id).songs.push(song.videos[i]);
         }
       }
     }
@@ -100,17 +78,25 @@ const player = async (yukie, message, song) => {
     }
   }
   if (queue && message.guild.me.voice.channel === null) {
-    if (queue.msg !== null) queue.msg.then(m => m.delete().catch(O_o => {}));
     await yukie.queues.delete(message.member.guild.id);
   }
-  //
+  
+  if (song.duration.seconds > 39600) {
+    message.reply(`a música **${song.title}** possuí mais de **10 horas**, e como eu não toco música com mais de **10 horas**, ela foi ignorada!`);
+    queue.songs.shift();
+    return player(yukie, message, queue.songs[0]);
+  }
+
   if (message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
-    const playing = require('../../utils/discord/music/playingEmbed');
-    const embed = await playing(song);
+    const embed = new Discord.MessageEmbed()
+    .setTitle(`${song.title}`)
+    .setDescription(`${song.author} • Duração ${song.duration.HHmmss}`)
+    .setThumbnail(song.thumbnail)
+    .setColor(process.env.DEFAULT_COLOR);
 
     message.channel.send('**🎧 Tocando agora:**', embed);
   }
-  //
+  
   if (!queue) {
     const conn = await message.member.voice.channel.join();
     queue = {

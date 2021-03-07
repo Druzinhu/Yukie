@@ -1,6 +1,7 @@
 module.exports = async (yukie) => {
 	var yukieUptime = () => {
 		let uptime = yukie.uptime / 1000;
+		
 		let days = Math.floor(uptime / 86400);
 		uptime %= 86400;
 		let hours = Math.floor(uptime / 3600);

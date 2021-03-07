@@ -4,7 +4,7 @@ const yukie = new Discord.Client();
 const fs = require('fs');
 require('dotenv').config();
 
-yukie.acess = ['748320609746026607', '451920956768649226'];
+yukie.acess = [ '748320609746026607', '451920956768649226' ];
 yukie.blockedUsers = [];
 yukie.commands = new Map();
 yukie.aliases = new Map();
