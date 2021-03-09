@@ -9,9 +9,11 @@ module.exports = {
 
         if (!queue) return message.queue.send("no_queue");
         if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.queue.send("different_connection");
-        //if (!queue.songs)
+
+        console.log(voiceChannel.members.filter(u => !u.user.bot).size);
+
         if (message.author.id !== queue.songs[0].author.id || voiceChannel.members.filter(u => !u.user.bot).size > 2) {
-            const playing = queue.songs[0].url;
+            const playing = queue.songs[0];
             const members = message.member.voice.channel.members.filter(u => !u.user.bot);
             const membersize = Math.round(members.size / 2);
 
@@ -29,13 +31,9 @@ module.exports = {
                 const collector = msg.createReactionCollector(filter, { time: 30000 });
                 
                 collector.on("collect", (r, u) => {
-                    if (!members.map(m => m.id).includes(u.id)) {
-                        //if (u.id === yukie.user.id) return;
-                        //r.users.remove(u.id);
-                        return;
-                    }
-                    if (playing !== queue.songs[0].url) return;
-                    if (!yukie.queues.get(message.guild.id)) return;
+                    if (!members.map(m => m.id).includes(u.id)) return;
+                    if (playing !== queue.songs[0]) return collector.stop();
+                    if (!yukie.queues.get(message.guild.id)) return collector.stop();
 
                     msg.edit(embed.setDescription('Aproximadamente **metade** dos usuários conectados devem concordar!\nUsuários ('+(r.count - 1)+'/'+membersize+') concordaram')).catch(() => {});
 
@@ -56,7 +54,7 @@ module.exports = {
                 })
             })
         }
-        message.channel.send(`**⏭️ Música pulada** por ${queue.songs[0].author}`);
+        message.channel.send(`**⏭️ Música pulada** por ${message.author}`);
 
         queue.paused = false;
         queue.songs.shift();

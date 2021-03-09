@@ -13,11 +13,11 @@ module.exports = async (yukie) => {
 	}
 
 	var guildQueue = (queues) => {
-		if (queues.size > 0 && queues.songs) {
-			const queue = queues.get([...queues.keys()][Math.floor(Math.random() * queues.size)]);
-			return `${queue.songs[0].title}! Música requisitada por ${queue.songs[0].author.tag}`;
+		if (queues.size) {
+			const queue = queues.get([...queues.keys()][Math.floor(Math.random() * queues.size)]).songs;
+			return queue.length ? `${queue[0].title}! Música requisitada por ${queue[0].author.tag}` : "MeiaUm - Goodbye";
 		}
-		else return 'Biffe - Bubbaloo!';
+		else return "MeiaUm - Goodbye";
 	}
 
 	function activities(selected) {

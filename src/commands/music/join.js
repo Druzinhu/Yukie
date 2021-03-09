@@ -22,7 +22,6 @@ module.exports = {
 
         message.channel.send(`**📥 Conectando em \`${memberVoiceChannel.name}\`**`);
         await memberVoiceChannel.join();
-        queue.dispatcher.resume();
     }
 }
 

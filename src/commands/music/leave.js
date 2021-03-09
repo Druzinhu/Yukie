@@ -6,7 +6,7 @@ module.exports = {
         const meVoiceChannel = message.guild.me.voice.channel;
 
         if (!meVoiceChannel) return message.queue.send("bot_not_connected");
-        if (voiceChannel !== meVoiceChannel || !voiceChannel) return message.queue.send("different_connection")
+        if (voiceChannel !== meVoiceChannel || !voiceChannel) return message.queue.send("different_connection");
 
         message.channel.send('**📤 Deconectando...**');
 
