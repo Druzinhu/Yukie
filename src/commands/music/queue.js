@@ -27,7 +27,7 @@ module.exports = {
            msg.edit(songs.slice(limit, limit + 5).join("\n"))
         })
          
-        col.on("finish", () => {
+        collector.on("finish", () => {
             msg.delete().catch(err => console.log(err))
         })
     }
