@@ -44,6 +44,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: '',
+    description: 'Consulta a lista de reprodução',
     usage: ''
 }
