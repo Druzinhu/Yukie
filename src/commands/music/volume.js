@@ -3,7 +3,7 @@ module.exports = {
     async execute (yukie, message, args) {
         let vol = args.join(' ')
         const queue = yukie.queues.get(message.guild.id);
-        
+    
         if (!message.member.voice.channel) return;
         if (!queue) return message.queue.send("no_queue")
         if (message.author.id !== queue.songs[0].author.id) {

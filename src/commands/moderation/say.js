@@ -3,17 +3,18 @@ const Discord = require('discord.js');
 module.exports = {
 	aliases: 'falar',
 	async execute (yukie, message, args, data) {
-		const msg = args.join(' ')
+		let msg = args.join(' ');
 
-		if (!message.member.hasPermission ('ADMINISTRATOR')) {
+		if (!message.member.hasPermission('ADMINISTRATOR')) {
 			return message.yukieReply('x', 'você não tem permissão para executar este comando! Para executá-lo, você precisa ter a permissão de `administrador`!')
 		}
 		if (msg) {
-			message.delete().catch(O_o => {});
-			message.channel.send(msg);
-		}
-		
-		else {
+			if (message.guild.me.hasPermission('MENTION_EVERYONE')) {
+				msg = msg.replace(/@everyone/g, '@everyonë').replace(/@here/g, '@herë');
+			}
+			//message.delete().catch(() => {});
+			message.channel.send(`${msg}\n\n*${message.author} enviou esta mensagem*`);
+		} else {
 			let embed = new Discord.MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle('Como usar?')

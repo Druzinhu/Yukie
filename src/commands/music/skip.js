@@ -5,14 +5,12 @@ module.exports = {
     aliases: 'pular',
     async execute (yukie, message, args, data) {
         const queue = yukie.queues.get(message.guild.id);
-        let voiceChannel = message.member.voice.channel;
+        const voiceChannel = message.member.voice.channel;
 
         if (!queue) return message.queue.send("no_queue");
         if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.queue.send("different_connection");
 
-        console.log(voiceChannel.members.filter(u => !u.user.bot).size);
-
-        if (message.author.id !== queue.songs[0].author.id || voiceChannel.members.filter(u => !u.user.bot).size > 2) {
+        if (message.author.id !== queue.songs[0].author.id && voiceChannel.members.filter(u => !u.user.bot).size > 2) {
             const playing = queue.songs[0];
             const members = message.member.voice.channel.members.filter(u => !u.user.bot);
             const membersize = Math.round(members.size / 2);
