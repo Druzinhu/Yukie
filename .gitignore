@@ -1,4 +1,5 @@
 node_modules
 cmd.bat
+.env
 .env-yukie1
 .env-yukie2

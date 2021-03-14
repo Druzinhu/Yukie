@@ -81,8 +81,8 @@ const player = async (yukie, message, song) => {
     await yukie.queues.delete(message.member.guild.id);
   }
   
-  if (song.duration.seconds > 39600) {
-    message.reply(`a música **${song.title}** possuí mais de **10 horas**, e como eu não toco música com mais de **10 horas**, ela foi ignorada!`);
+  if (song.duration.seconds > 25200) {
+    message.channel.send(`A música **${song.title}** possuí mais de **10 horas**, e como eu não posso tocar música com mais de **10 horas**, ela foi ignorada!`);
     queue.songs.shift();
     return player(yukie, message, queue.songs[0]);
   }
@@ -94,7 +94,7 @@ const player = async (yukie, message, song) => {
     .setThumbnail(song.thumbnail)
     .setColor(process.env.DEFAULT_COLOR);
 
-    message.channel.send('**🎧 Tocando agora:**', embed);
+    song.message = await message.channel.send('**🎧 Tocando agora:**', embed);
   }
   
   if (!queue) {
@@ -115,6 +115,9 @@ const player = async (yukie, message, song) => {
       }*/
   )
   .on("finish", () => {
+    if (song.message) {
+      song.message.delete().catch(() => {});
+    }
     queue.songs.shift();
     player(yukie, message, queue.songs[0]);
   });

@@ -8,27 +8,57 @@ module.exports = async function search(yukie, message, s) {
     let song;
     let result;
 
-    if (yukie.queues.get(`${message.guild.id}_play`)) return song = false;
+    if (yukie.queues.get(`${message.guild.id}_play`)) return false;
     message.channel.send('**🔎 Pesquisando...**');
 
     const playlistURL = s.match(/https:\/\/youtube.com\/playlist\?list=/g);
     const playlistURL2 = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g);
     const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g);
+    const videoURL2 = s.match(/https:\/\/youtu.be\//g);
 
     // P L A Y L I S T - U R L
     if (playlistURL || playlistURL2) {
-        var playlist = await youtube.getPlaylist(s);
+        var playlist;
+        try {
+            playlist = await youtube.getPlaylist(s);
+        } catch (e) {
+            if (e.message.includes("resource youtube#playlistListResponse not found")) {
+                playlist = false;
+            } else console.error(e);
+        }
+        if (!playlist) {
+            message.yukieReply('x', '**Desculpe, mas não encontrei nenhuma playlist com este url!** Por favor, verifique se o url está correto.')
+            return false;
+        }
+
         var videos = await playlist.getVideos();
+        if (videos.length < 2) {
+            message.yukieReply('x', 'Por favor, escolha uma playlist com pelo menos **duas músicas**!')
+        }
     }
 
     // V I D E O - U R L
-    else if (videoURL) {
-        result = await youtube.getVideo(s).then(v => v);
+    else if (videoURL || videoURL2) {
+        try {
+            result = await youtube.getVideo(s).then(v => v);
+        } catch (e) {
+            if (e.message.includes("resource youtube#videoListResponse not found")) {
+                result = false;
+            } else console.error(e);
+        }
+        if (!result) {
+            message.yukieReply('x', '**Desculpe, mas não encontrei nenhum vídeo com este url!** Por favor, verifique se o url está correto.')
+            return false;
+        }
     }
 
     // V I D E O - T I T L E
     else {
         result = await youtube.searchVideos(s, 1).then(v => v[0]);
+        if (!result) {
+            message.yukieReply('x', `Desculpe, mas não encontrei nenhuma música relacionada à sua pesquisa! :(`);
+            return false;
+        }
     }
 
     if (playlistURL || playlistURL2) {
@@ -37,12 +67,10 @@ module.exports = async function search(yukie, message, s) {
 
         for (let i = 0; i < videos.length; i++) {
             result = videos[i];
-
             if (playlist.videos.length <= 1) {
                 message.reply("por favor, escolha uma playlist com pelo menos **2 músicas**!")
                 return song = false;
             }
-
             song.videos.push({
                 title: result.title,
                 url: result.url,
@@ -92,12 +120,10 @@ module.exports = async function search(yukie, message, s) {
             return song = false;
         }
     }
-
     if (!message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
         message.channel.send('Preciso da permissão de **inserir links** para poder enviar **embeds**!');
         return song;
     }
-    
     if (song.hasPlaylist) {
         const embed = new Discord.MessageEmbed()
         .setAuthor(`${message.author.tag}`, `${message.author.avatarURL()}`)
