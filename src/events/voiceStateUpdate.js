@@ -16,9 +16,8 @@ module.exports = async (oldState, newState, yukie) => {
         // Verifica se não há ninguém na call
         if (voiceChannel.members.filter(m => !m.user.bot).size === 0) {
             queue.dispatcher.pause();
-            
             timeout = setTimeout(() => {
-                if (yukie.queues.get(guildID) && guild.me.voice.channel && guild.me.voice.channel.members.filter(m => !m.user.bot) === 0) {
+                if (yukie.queues.get(guildID) && guild.me.voice.channel && guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0) {
                     queue = yukie.queues.get(guildID);
 
                     yukie.queues.delete(guildID);

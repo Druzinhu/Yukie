@@ -34,7 +34,6 @@ module.exports = async (message, yukie) => {
 
 	if (commands) {
 		console.log('log', `${message.author.tag} [ID ${message.author.id}] executou: ${prefix+comando}`);
-
 		if (cooldown.has(message.author.id)) {
 			let author = cooldown.get(message.author.id);
 			if (author.messages === 5 && message.content === author.messageContent) return yukie.blockedUsers.push(message.author.id);

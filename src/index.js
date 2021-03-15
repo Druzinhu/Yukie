@@ -1,9 +1,14 @@
 const Discord = require('discord.js');
+const firebase = require('firebase');
 const yukie = new Discord.Client();
 
 const fs = require('fs');
 require('dotenv').config();
 
+const database = require('./utils/database');
+database.init(process.env.FIREBASE_CONFIG);
+
+yukie.database = database.database(firebase);
 yukie.acess = [ '748320609746026607', '451920956768649226' ];
 yukie.blockedUsers = [];
 yukie.commands = new Map();

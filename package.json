@@ -14,11 +14,13 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
+    "firebase": "^8.3.0",
+    "firebase-admin": "^9.5.0",
     "fluent-ffmpeg": "^2.1.2",
     "moment": "^2.29.1",
     "npm-check-updates": "^11.3.0",
     "simple-youtube-api": "^5.2.1",
-    "yt-search": "^2.7.3",
+    "yt-search": "^2.7.4",
     "ytdl-core": "^4.5.0"
   }
 }
