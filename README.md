@@ -1,12 +1,14 @@
+- Soon I will post several updates ;)
+
 ## ✨ About
 
-• Yukie is a Discord bot, it is made using the **JavaScript** language and has commands for **moderation, music, fun, among others**.
+- Yukie is a Discord bot, it is made using the **JavaScript** language and has commands for **moderation, music, fun, among others**.
 
 ------
 
 ## 📝 License
 
-• The project license is **[GPL-3.0](https://github.com/Druzinhu/Yukie-Heroku/blob/master/LICENSE)**, that is, you can copy, modify or distribute this project, **since you publish the source code with the same license and with creator copyright notice**.
+- The project license is **[GPL-3.0](https://github.com/Druzinhu/Yukie-Heroku/blob/master/LICENSE)**, that is, you can copy, modify or distribute this project, **since you publish the source code with the same license and with creator copyright notice**.
 
 ------
 
