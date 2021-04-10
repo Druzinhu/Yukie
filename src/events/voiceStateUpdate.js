@@ -1,9 +1,10 @@
 module.exports = async (oldState, newState, yukie) => {
     if (newState.id === yukie.user.id) return;
+   
     const guildID = newState.guild.id
-
-    if (!yukie.queues.get(guildID)) return;
     let queue = yukie.queues.get(guildID);
+    if (!queue) return;
+
     const guild = queue.guild;
     const voiceChannel = guild.me.voice.channel;
 

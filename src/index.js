@@ -1,31 +1,37 @@
 const Discord = require('discord.js');
-const firebase = require('firebase');
 const yukie = new Discord.Client();
-
 const fs = require('fs');
 require('dotenv').config();
 
-const database = require('./utils/database');
-database.init(process.env.FIREBASE_CONFIG);
+module.exports = yukie;
 
-yukie.database = database.database(firebase);
-yukie.acess = [ '748320609746026607', '451920956768649226' ];
-yukie.blockedUsers = [];
+const { prototypes } = require("./utils/music/playlist");
+prototypes.load();
+
+const Firebase = require('./strc/database/Firebase');
+Firebase.init(process.env.FIREBASE_CONFIG);
+
+yukie.database = Firebase.config(yukie);
+//yukie.database.get('Yukie/BlockedUsers').then(b => yukie.blockedUsers =  b ?  b : []);
+yukie.blockedUsers = new Map();
+
 yukie.commands = new Map();
 yukie.aliases = new Map();
 yukie.interval = new Map();
 yukie.queues = new Map();
 
+//const deleteUsersPlaylist = require('./strc/DeleteUsersPlaylist')(yukie);
+
 fs.readdirSync('src/commands').forEach(category => {
-	const commands = fs.readdirSync(`./src/commands/${category}/`).filter(file => file.endsWith(".js"));
-	
+	const commands = fs.readdirSync(`./src/commands/${category}/`)
+	.filter(file => file.endsWith(".js"));
+
 	for (let file of commands) {
 		const command = require(`./commands/${category}/${file}`);
-		const commandName = file.replace(/.js/g, '');
-
+		const commandName = file.replace(/.js/g, '').toLowerCase();
+		
 		if(command.aliases) { 
 			const aliases = command.aliases.split(" ");
-
 			aliases.forEach(aliase => {
 				yukie.aliases.set(aliase, command);
 				console.log('Carregando aliase: ' + aliase);

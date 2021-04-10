@@ -4,15 +4,15 @@ module.exports = {
         const queue = yukie.queues.get(message.guild.id);
 
         if (!message.member.voice.channel) return;
-        if (!queue) return message.queue.send("no_queue");
-        if (message.member.voice.channel !== message.guild.me.voice.channel) return message.queue.send("different_connection"); 
+        if (!queue) return message.yukieReply('blocked', "no_queue");
+        if (message.member.voice.channel !== message.guild.me.voice.channel) return message.yukieReply('x', "different_connection"); 
 
         if (queue.paused) {
             return message.channel.send('**❌ A música já está pausada!**');
         }
 
         queue.paused = true;
-        queue.dispatcher.pause(/*true*/);
+        queue.dispatcher.pause();
         message.channel.send(`▶️ **Música pausada** por ${message.author}`);
     }
 }

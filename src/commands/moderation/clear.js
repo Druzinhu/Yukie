@@ -1,43 +1,25 @@
 module.exports = {
     aliases: 'limpar',
-    async execute (yukie, message, args, data) {
-        const number = args.join(' ')
-
-        if (!message.member.hasPermission("ADIMINISTRATOR")) {
-            return message.reply(`Você não tem permissão para executar este comando!`);
-        };
+    async execute(yukie, message, args) {
+        const number = args[0];
+        if (!args[0]) message.yukieReply('x', 'Ecolha um valor de 1 à 100');
         
-        if (!number) return message.reply(`Coloque um número de mensagens a serem excluídas!`);
+        const msg = await message.channel.messages.fetch({ limit: number });
+        const deleted = await message.channel.bulkDelete(msg, true);
 
-        if (isNaN(number) === true) return message.reply(`Coloque um valor de 2 a 100 para o número de mensagens a serem excluídas!`);
-
-        if (number < 2 || number > 100) return message.reply(`Eu só posso deletar entre 2 e 100 mensagens!`);
-
-        message.channel.messages.fetch({ limit: number })
-        .then(msg => {
-            message.channel.bulkDelete(msg, true).then(ar => {
-                const deleted = ar.array().length;
-                
-                if (deleted == number || !number > msg.size) {
-                    return message.reply(`Chat limpo!`);
-                }
-                else {
-                    if (msg.size - deleted == 0) {
-                        return message.reply(`Chat limpo!`);
-                    }
-                    else {
-                        if (msg.size - deleted == 1) return message.reply(`Chat limpo! Porém 1 mensagem não foi deletada por ter sido enviada a mais de 2 semanas!`)
-                        else return message.reply(`Chat limpo! Porém ${msg.size - deleted} mensagens não puderam ser deletadas por terem sido enviadas a mais de 2 semanas!`)
-                    }
-                }
-            })
-        })
+        if (number - deleted.size === 0) {
+            message.yukieReply('', 'O canal foi limpo.');
+        } else if (msg.size - deleted.size === 0) {
+            message.yukieReply('', 'O canal foi limpo.');
+        } else {
+            if (msg.size - deleted.size === 1) message.yukieReply('', `**1 mensagem não foi deleteda** por ter sido enviada à mais de 14 dias (2 semanas).`);
+            else message.yukieReply('', `Cerca de **${msg.size - deleted.size} mensagens não puderam ser deletadas** por terem sido enviadas à mais de 14 dias (2 semanas).`)
+        }
     }
 }
 
 module.exports.help = {
     category: 'moderation',
-    description: 'Apaga mensagens de um canal',
-    usage: `<2 - 100>`
-}
-
+    description: 'Excluí o valor especificado de mensagens',
+    usage: `número de 1 à 100`
+  }

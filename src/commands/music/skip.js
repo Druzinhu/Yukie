@@ -1,14 +1,14 @@
-const Discord = require('discord.js')
-const player = require('./play').player
+const Discord = require('discord.js');
+const { player } = require('../../utils/music/player');
 
 module.exports = {
     aliases: 'pular',
-    async execute (yukie, message, args, data) {
+    async execute (yukie, message) {
         const queue = yukie.queues.get(message.guild.id);
         const voiceChannel = message.member.voice.channel;
 
-        if (!queue) return message.queue.send("no_queue");
-        if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.queue.send("different_connection");
+        if (!queue) return message.yukieReply('blocked', "no_queue");
+        if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.yukieReply('x', "different_connection");
 
         if (message.author.id !== queue.songs[0].author.id && voiceChannel.members.filter(u => !u.user.bot).size > 2) {
             const members = message.member.voice.channel.members.filter(u => !u.user.bot);
@@ -22,8 +22,7 @@ module.exports = {
 
             return message.channel.send(embed).then(msg => {
                 msg.react('⏭️').catch(() => msg.delete().catch(() => {}));
-
-                if (msg.deleted === true) return;
+                if (msg.deleted) return;
                 
                 const filter = (r) => ['⏭️'].includes(r.emoji.name);
                 const collector = msg.createReactionCollector(filter, { time: 30000 });
@@ -42,20 +41,22 @@ module.exports = {
                         message.channel.send('**⏭️ Música pulada**');
                         
                         if (queue.songs[0].message) queue.songs[0].message.delete().catch(() => {});
+                        if (queue.queueLoop) queue.songs.push(queu.songs[0]);
                         queue.paused = false;
                         queue.songs.shift();
                         player(yukie, message, queue.songs[0]);
                     }
-                })
-
+                });
                 collector.on("end", () => {
                     msg.delete().catch(() => {});
-                })
-            })
+                });
+            });
         }
-        message.channel.send(`**⏭️ Música pulada** por ${message.author}`);
-
-        if (queue.songs[0].message) queue.songs[0].message.delete().catch(() => {});
+        if (voiceChannel.members.filter(u => !u.user.bot).size > 1) message.channel.send(`**⏭️ Música pulada** por ${message.author}`);
+        else message.channel.send(`**⏭️ Música pulada**`);
+        
+        if (!queue.songs[0].message.deleted) queue.songs[0].message.delete().catch(() => {});
+        if (queue.queueLoop) queue.songs.push(queue.songs[0]);
         queue.paused = false;
         queue.songs.shift();
         player(yukie, message, queue.songs[0]);
@@ -64,6 +65,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: 'Pula a música que está tocando',
+    description: 'Pula a música que está sendo reproduzida',
     usage: ''
 }

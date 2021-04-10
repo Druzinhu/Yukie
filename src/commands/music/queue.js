@@ -2,19 +2,24 @@ module.exports = {
     aliases: "fila",
     async execute (yukie, message, args, data) {
         const queue = yukie.queues.get(message.guild.id);
-        if (!queue) return message.queue.send("no_queue");
+        if (!queue) return message.yukieReply('blocked', "no_queue");
 
         let i = 1;
-        const queueSongs = queue.songs.map(s => `${i++} - ${s.title} | ${s.duration.HHmmss}`);
+        const queueSongs = queue.songs.map(s => `${i++} - ${s.title} | ${s.duration}`);
         const songs = [];
-        let n = 0;
-        let isTrue = true;
-        while (isTrue) {
-            if (queueSongs.slice(n, n + 5).length < 1) isTrue = false;
-            else {
-                songs.push(queueSongs.slice(n, n + 5).join("\n---- -- ----\n"));
-                n = n + 5;
+        
+        if (queueSongs.length > 0) {
+            let n = 0;
+            let isTrue = true;
+            while (isTrue) {
+                if (queueSongs.slice(n, n + 5).length < 1) isTrue = false;
+                else {
+                    songs.push(queueSongs.slice(n, n + 5).join("\n---- -- ----\n"));
+                    n = n + 5;
+                }
             }
+        } else {
+            songs.push('- Não há nenhuma música na fila.');
         }
         
         const msg = await message.channel.send(`\`\`\`${songs[0]}\`\`\``);

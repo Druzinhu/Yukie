@@ -1,6 +1,31 @@
-module.exports.execute = async (yukie, message, args) => {
-    message.react('✅');
-    message.channel.send('Por favor, digite o nome ou url das músicas que você deseja adicionar á sua playlist!');
-    
-    yukie.database.ref(`Yukie/Users/${message.author.id}`).update({ playlist: 'isTrue' })
+const Discord = require('discord.js');
+
+module.exports.execute = async (yukie, message, args, data) => {
+    const methods = require("../../utils/music/playlist/methods/index");
+    const method = methods[args[0]];
+
+    if (method) {
+        method(yukie, message, data, args);
+    } else {
+        const cmd = `${data.prefix + data.command}`;
+        const embed = new Discord.MessageEmbed()
+        .setColor(process.env.DEFAULT_COLOR)
+        .setThumbnail(message.author.displayAvatarURL({ format: 'png' }))
+        .setTitle(`O comando ${cmd} possuí os seguintes métodos:`)
+        .addField(`${cmd} tocar`, `🔹 **Descrição:** Reproduz sua playlist selecionada.`)
+        .addField(`${cmd} info \`<nome da playlist>\``, `🔹 **Descrição:** Mostra as informações da sua playlist.`)
+        .addField(`${cmd} selecionar \`<nome da playlist>\``, `🔹 **Descrição:** Seleciona a plylist que você deseja reproduzir.`)
+        .addField(`${cmd} criar \`<nome da playlist>\``, `🔹 **Descrição:** Cria uma playlist com o nome desejado.`)
+        .addField(`${cmd} deletar \`<nome da playlist>\``, `🔹 **Descrição:** Deleta a playlist com o nome especificado.`)
+        .addField(`${cmd} renomear \`<nome desejado>\``, `🔹 **Descrição:** Renomea sua playlist selecionada.`)
+        .addField(`${cmd} remover \`<número da música>\``, `🔹 **Descrição:** Remove a música da sua playlist.`)
+        .addField(`${cmd} editar \`<número da música>\` e \`<número de outra música>\``, `🔹 **Descrição:** Altera a ordem das músicas da sua playlist.`)
+        message.channel.send(embed);
+    }
+}
+
+module.exports.help = {
+    category: 'music',
+    description: '',
+    usage: '',
 }

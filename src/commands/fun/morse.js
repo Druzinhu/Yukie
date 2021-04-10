@@ -113,6 +113,6 @@ module.exports = {
 
 module.exports.help = {
 	category: 'fun',
-    description: 'Converte frases em código morse',
+    description: 'Converte palavras em código morse e vise versa',
     usage: `<frase>`
 }

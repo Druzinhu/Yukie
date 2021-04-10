@@ -1,125 +1,71 @@
 const Discord = require('discord.js');
 const ytsearch = require('yt-search');
 
-const YouTube = require('simple-youtube-api');
-const youtube = new YouTube(process.env.YOUTUBE_API_KEY);
+//const YouTube = require('simple-youtube-api');
+//const youtube = new YouTube(process.env.YOUTUBE_API_KEY);
 
 module.exports = async function search(yukie, message, s) {
-    let song;
-    let result;
-
     if (yukie.queues.get(`${message.guild.id}_play`)) return false;
     message.channel.send('**🔎 Pesquisando...**');
 
-    const playlistURL = s.match(/https:\/\/youtube.com\/playlist\?list=/g);
-    const playlistURL2 = s.match(/https:\/\/www.youtube.com\/playlist\?list=/g);
-    const videoURL = s.match(/https:\/\/www.youtube.com\/watch\?v=/g);
-    const videoURL2 = s.match(/https:\/\/youtu.be\//g);
+    const videoURL = /(https:\/\/\)\(www.)(youtube.com|youtu.be)/gi;
+    const playlistURL = /https:\/\/(www.)?youtube.com\/playlist\?list=/gi;
+    const ID = s.replace(/https:\/\/(www.)?(youtube.com|youtu.be|youtube)\/(watch\?v=|playlist\?list=)?/g, '');
 
-    const videoID = s.replace(/https:\/\/www.youtube.com\/watch\?v=/g, '').replace(/https:\/\/youtu.be\//g, '');
-   
+    let song;
+    let result;
     // P L A Y L I S T - U R L
-    if (playlistURL || playlistURL2) {
-        var playlist;
-        try {
-            playlist = await youtube.getPlaylist(s);
-        } catch (e) {
-            if (e.message.includes("resource youtube#playlistListResponse not found")) {
-                message.yukieReply('x', '**Desculpe, mas não encontrei nenhuma playlist com este url!** Por favor, verifique se o url está correto.')
-                return false;
-            } else console.error(e);
+    if (playlistURL.test(s)) {
+        var playlist = await ytsearch({ listId: ID });
+        if (!playlist) {
+            message.yukieReply('blocked', '**Desculpe, mas não encontrei nenhuma playlist com este url!** Por favor, verifique se o url está correto.')
+            return false;
         }
-
-        var videos = await playlist.getVideos();
+        var videos = playlist.videos;
         if (videos.length < 2) {
-            message.yukieReply('x', 'Por favor, escolha uma playlist com pelo menos **duas músicas**!')
+            message.yukieReply('x', "Por favor, escolha uma playlist com pelo menos **duas músicas**!");
+            return false;
         }
     }
 
     // V I D E O - U R L
-    else if (videoURL || videoURL2) {
-        try {
-            result = await ytsearch({ videoId: videoID });
-        } catch (e) {
-            if (e.message.includes("resource youtube#videoListResponse not found")) {
-                message.yukieReply('x', '**Desculpe, mas não encontrei nenhum vídeo com este url!** Por favor, verifique se o url está correto.')
-                return false;
-            } else console.error(e);
+    else if (videoURL.test(s)) {
+        result = await ytsearch({ videoId: ID });
+        if (!result) {
+            message.yukieReply('blocked', `Desculpe, mas não encontrei o video com este link! Por favor, verifique se o link está certo.`);
+            return false;
         }
     }
 
     // V I D E O - T I T L E
     else {
-        result = await ytsearch(s);
+        result = (await ytsearch(s)).videos[0];
         if (!result) {
             message.yukieReply('x', `Desculpe, mas não encontrei nenhuma música relacionada à sua pesquisa! :(`);
             return false;
         }
     }
 
-    if (playlistURL || playlistURL2) {
-        const songs = [];
-        song = { videos: songs, hasPlaylist: true };
-
-        for (let i = 0; i < videos.length; i++) {
-            result = videos[i];
-            if (playlist.videos.length <= 1) {
-                message.reply("por favor, escolha uma playlist com pelo menos **2 músicas**!")
-                return song = false;
-            }
-            song.videos.push({
-                title: result.title,
-                url: result.url,
-                author: message.author,
-                id: result.id,
-                thumbnail: result.thumbnails.medium.url,
-            });
-        }
-    } else {
+    if (playlist) {
         song = {
-            title: result.title,
-            url: result.url,
-            author: message.author,
-            id: result.videoId,
-            duration: toHHmmss(result.duration.seconds),
-            seconds: result.duration.seconds,
-            thumbnail: 'https://i.ytimg.com/vi/' + result.videoId + '/mqdefault.jpg',
+            videos: videos.map(result => getSongInfo(result, message)),
+            hasPlaylist: true,
         }
-    }
-    function toHHmmss(secs) {
-        const sec_num = parseInt(secs, 10);
-        const hour    = Math.floor(sec_num / 3600);
-        const minutes = Math.floor(sec_num / 60) % 60;
-        const seconds = sec_num % 60;
-
-        return [hour, minutes, seconds]
-        .map(v => v < 10 ? "0" + v : v)
-        .filter((v, i) => v !== "00" || i > 0)
-        .join(':');
+    } else song = getSongInfo(result, message);
+    
+    if (song.seconds > 28800) {
+        message.reply('eu não reproduzo músicas com mais de 7 horas!');
+        return false;
     }
 
-    if (song.hasPlaylist) {
-        let video;
-        for (let i = 0; i < song.videos.length; i++) {
-            video = song.videos[i];
-            const seconds = (await ytsearch({ videoId: video.id })).seconds;
-            video.duration = { seconds: seconds, HHmmss: toHHmmss(seconds) };
-        }
-    } else {
-        if (song.duration.seconds > 39600) {
-            message.reply('eu não reproduzo músicas com mais de 10 horas!');
-            return song = false;
-        }
-    }
     if (!message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
         message.channel.send('Preciso da permissão de **inserir links** para poder enviar **embeds**!');
-        return song;
     }
-    if (song.hasPlaylist) {
+    else if (playlist) {
         const embed = new Discord.MessageEmbed()
         .setAuthor(`${message.author.tag}`, `${message.author.avatarURL()}`)
         .setTitle(playlist.title)
-        .addField('Canal', `${playlist.channelTitle}`, true)
+        .addField('Canal', `[${playlist.author.name}](https://youtube.com/channel/UCuNZtu_l2p5VMu2-Efpq0AA)`, true)
         .addField('Contém', `\`${videos.length}\` músicas`, true)
         .setColor(process.env.DEFAULT_COLOR)
         .setURL(playlist.url)
@@ -127,9 +73,29 @@ module.exports = async function search(yukie, message, s) {
         
         message.channel.send('**<:yt:785493083546320916> | Playlist adicionada:**', embed);
     }
-    else {
-        message.channel.send(`**<:yt:785493083546320916> Música adicionada:** \`${song.title}\``);
-    }
-    
+    else message.channel.send(`**<:yt:785493083546320916> Música adicionada:** \`${song.title}\``);
     return song;
+}
+
+function getSongInfo(result, message) {
+    return {
+        title: result.title,
+        url: 'https://www.youtube.com/watch?v=' + result.videoId,
+        author: message.author,
+        id: result.videoId,
+        duration: toHHmmss(result.duration.seconds),
+        seconds: result.duration.seconds,
+        thumbnail: 'https://i.ytimg.com/vi/' + result.videoId + '/mqdefault.jpg',
+    }
+}
+function toHHmmss(secs) {
+    secs = parseInt(secs, 10);
+    const hour    = Math.floor(secs / 3600);
+    const minutes = Math.floor(secs / 60) % 60;
+    const seconds = secs % 60;
+
+    return [hour, minutes, seconds]
+    .map(v => v < 10 ? "0" + v : v)
+    .filter((v, i) => v !== "00" || i > 0)
+    .join(':');
 }

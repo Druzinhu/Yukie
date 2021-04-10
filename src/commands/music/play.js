@@ -21,36 +21,25 @@ module.exports = {
 
     try {
       const song = await search(yukie, message, args.join(' '));
-      if (song === false) return;
-
-      if (yukie.queues.get(message.guild.id) && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
-        await message.member.voice.channel.join();
-        yukie.queues.get(message.guild.id).dispatcher.resume();
-      }
-
+      if (!song) return;
       let queue = yukie.queues.get(message.guild.id);
+
+      if (queue && (!message.guild.me.voice.channel || message.guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0)) {
+        await message.member.voice.channel.join();
+        queue.dispatcher.resume();
+      }
 
       // P L A Y L I S T
       if (song.hasPlaylist) {
-        const songlength = song.videos.length;
         let songs;
-
         if (!queue) {
           yukie.interval.set(`${message.guild.id}_play`, true);
           await player(yukie, message, song.videos[0]);
           songs = true;
         }
-
         if (yukie.queues.get(message.guild.id)) {
-          let i = 0;
-          
-          if (songs) {
-            i = 1, songs = false;
-          }
-
-          for (i; i < songlength; i++) {
-            yukie.queues.get(message.guild.id).songs.push(song.videos[i]);
-          }
+          let n = songs ? 1 : 0;
+          song.videos.slice(n).map(v => yukie.queues.get(message.guild.id).songs.push(v));
         }
       }
 
