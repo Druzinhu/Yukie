@@ -1,6 +1,6 @@
 ## ✨ About
 
-- Yukie is a Discord bot, it is made using the **JavaScript** language and has commands for **moderation, music, fun, among others**.
+- **Yukie is a Discord bot**. She is made in **JavaScript** language and, although it has commands focused on music, I intend to add more commands such as moderation, fun, among others.
 
 ------
 
