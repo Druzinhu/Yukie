@@ -6,6 +6,7 @@ module.exports.execute = async (yukie, message, args, data) => {
 
     if (method) {
         method(yukie, message, data, args);
+        //message.author.playlists = await yukie.database.user.get(message.author.id + '/Playlists');
     } else {
         const cmd = `${data.prefix + data.command}`;
         const embed = new Discord.MessageEmbed()

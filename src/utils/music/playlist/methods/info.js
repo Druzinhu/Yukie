@@ -3,7 +3,7 @@ const getTimestamp = require('../../../../strc/GetTimestamp');
 
 module.exports = async function view(yukie, message) {
     const playlist = message.author.playlist;
-    if (!playlist) return message.yukieReply('x', 'Selecione uma playlist para mim reproduzí-la!');
+    if (!playlist) return message.yukieReply('x', 'Selecione uma playlist para que eu possa mostrar as informações dela.');
 
     let songs = playlist.songs ? Object.values(playlist.songs) : null;
     let songsLength = songs.length > 0 ? `- (${songs.length === 1 ? songs.length + ' música' : songs.length + ' músicas'})` : '';

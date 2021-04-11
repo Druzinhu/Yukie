@@ -10,6 +10,7 @@ module.exports = class PROTO {
 
             const playlists = UserDB.Playlists
             if(!playlists) return
+            this.playlists = playlists;
 
             if(!name) {
                 if(!UserDB.lastPlaylistName) return

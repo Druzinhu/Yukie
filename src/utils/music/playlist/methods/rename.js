@@ -6,7 +6,7 @@ module.exports = async function rename (yukie, message, data, args) {
     const regexSpace = /\s+/g
 
     let name = args.slice(1).join(" ")
-    if(regexAlpha.test(name)) return message.yukieReply('x', "O nome fornecido possui caracteres não permitidos!")
+    if(regexAlpha.test(name)) return message.yukieReply('x', "O nome fornecido possui caracteres não permitidos.")
  
     name = name.replace(regexSpace, " ")
     if(name.length > 25) return message.yukieReply('blocked', "O nome fornecido é muito grande!")

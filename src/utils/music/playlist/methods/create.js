@@ -10,13 +10,12 @@ module.exports = async function play(yukie, message, data, args) {
     if (name.length > 25) return message.yukieReply('x', "Por favor, escolha um nome com menos de 25 letras!");
     name = name.replace(/\s+/g, " ");
 
-    const hasPlaylistName = await yukie.database.users.get(`${message.author}/Playlists/${name}`);
-    if (hasPlaylistName) return message.yukieReply('x', 'Você já possui uma playlist com esse nome!');
-
-    const playlist = await yukie.database.users.get(message.author.id +  '/Playlists');
-    const limit = !playlist ? 0 : Object.keys(playlist).length;
-
+    const playlist = message.author.playlists;
+    if (playlist[name]) return message.yukieReply('x', 'Você já possui uma playlist com esse nome!');
+    
+    const limit = Object.keys(playlist).length;
     if (limit === 5) return message.yukieReply('blocked', '**Você atingiu o número máximo de playlists!**');
+    
     Playlist.create(message.author, name);
     message.yukieReply('', '**Playlist criada com sucesso!** Use o comando `.playlist tocar` caso você queira reproduzir sua playlist.');
 }

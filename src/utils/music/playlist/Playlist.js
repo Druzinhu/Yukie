@@ -31,7 +31,7 @@ module.exports = class Playlist {
          this.songs[entried[0]].position = this.songs[song[0]].position
          this.songs[song[0]].position = newindex
 
-         await yukie.database.users.update(this.user.id + "/Playlists/" + this.name, {songs: this.songs})
+         await yukie.database.users.update(this.user.id + "/Playlists/" + this.name, { songs: this.songs })
      }
 
      async add (song) {
@@ -49,15 +49,15 @@ module.exports = class Playlist {
 
          const fillSongs = Object.entries(this.songs).filter(s => s[1].position > songpos)
          if(fillSongs) {
-             fillSongs.forEach(s => this.songs[s[0]].position = this.songs[s[0]].position - 1)
+            fillSongs.forEach(s => this.songs[s[0]].position = this.songs[s[0]].position - 1)
          }
 
-         await yukie.database.users.update(this.user.id + "/Playlists/" + this.name, {songs: this.songs})
+         await yukie.database.users.update(this.user.id + "/Playlists/" + this.name, { songs: this.songs })
      }
 
     async rename (name) {
         const savedPlaylist = await yukie.database.users.get(this.user.id + "/Playlists/" + this.name)
-
+        
         const object = {}
         object[name] = savedPlaylist
         object[this.name] = null
