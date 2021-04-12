@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const getTimestamp = require('../../../../strc/GetTimestamp');
 
 module.exports = async function view(yukie, message) {
-    const playlist = message.author.playlist;
+    const playlist = message.author.lastPlaylist;
     if (!playlist) return message.yukieReply('x', 'Selecione uma playlist para que eu possa mostrar as informações dela.');
 
     let songs = playlist.songs ? Object.values(playlist.songs) : null;

@@ -9,7 +9,7 @@ module.exports = {
         if (message.author.id !== queue.songs[0].author.id) {
             return message.channel.send('Somente o usuário que requisitou a música pode definir o volume!');
         }
-        if (isNaN(vol) === true || vol < 1 || vol > 100) {
+        if (isNaN(vol)|| vol < 1 || vol > 100) {
             return message.channel.send('**O valor do volume deve ser entre 1 e 100!**');
         }
         vol = Math.round(vol)

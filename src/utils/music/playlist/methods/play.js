@@ -2,9 +2,9 @@ const { player } = require('../../player/');
 //const ys = require('yt-search');
 
 module.exports = async(yukie, message) => {
-    const playlist = message.author.playlist;
+    const playlist = message.author.lastPlaylist;
 
-    if (!playlist) return message.yukieReply('x', 'Selecione uma playlist para mim reproduzí-la!');
+    if (!playlist) return message.yukieReply('x', 'Selecione ou crie uma playlist para mim reproduzí-la!');
     let queue = yukie.queues.get(message.guild.id);
 
     const memberVoiceChannel = message.member.voice.channel;
@@ -20,7 +20,7 @@ module.exports = async(yukie, message) => {
     if (songs.length < 2) return message.yukieReply('blocked', 'Para reproduzir sua playlist, ela deve conter pelo menos **duas músicas**.');
     
     const songPlaylist = queue ? queue.songs : false;
-    if (songPlaylist && songPlaylist.filter(s => s.playlist && s.playlist.name === playlist.name && s.playlist.authorID === message.author.id).length > 0) {
+    if (songPlaylist && songPlaylist.filter(s => s.playlist && s.playlist.name === playlist.name && s.playlist.authorId === message.author.id).length > 0) {
         return message.yukieReply('x', '**Sua playlist já está sendo reproduzida!**')
     }
     message.channel.send('**<:YouTube:785493083546320916> Sua playlist foi adicionada à fila.**');
@@ -42,8 +42,8 @@ function songInfo(song, author) {
         title: song.title,
         id: song.id,
         playlist: { 
-            name: author.playlist.name, 
-            authorID: author.id,
+            name: author.lastPlaylist.name, 
+            authorId: author.id,
         },
         url: "https://www.youtube.com/watch?v=" + song.id,
         duration: song.duration,

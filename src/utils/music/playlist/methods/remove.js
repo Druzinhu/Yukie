@@ -1,5 +1,5 @@
 module.exports = async function remove (yukie, message, data, args) {
-    const playlist = message.author.playlist;
+    const playlist = message.author.lastPlaylist;
     if(!playlist) return message.yukieReply('x', "Você precisa criar ou selecionar uma playlist!")
    
     const songNumber = Number(args[1]);

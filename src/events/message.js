@@ -20,7 +20,7 @@ module.exports = async (message, yukie) => {                 //yukie.blockedUser
 	const data = {
 		command: comando,
 		prefix: prefix,
-		ownerID: process.env.OWNER,
+		//ownerID: process.env.OWNER,
 		rssUsage: Math.round(process.memoryUsage().rss / 1024 / 1024),
 	}
 

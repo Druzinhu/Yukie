@@ -21,17 +21,17 @@ module.exports = class PROTO {
                     name: UserDB.lastPlaylistName
                 }
 
-                this.playlist = new Playlist(playlist.name, playlist.songs ? playlist.songs : {}, playlist.createdAt, this)
-                return this.playlist
+                this.lastPlaylist = new Playlist(playlist.name, playlist.songs ? playlist.songs : {}, playlist.createdAt, this)
+                return this.lastPlaylist
             } else {              
                 const playlist = playlists[name]
                 if(!playlist) return
 
-                this.playlist = new Playlist(name, playlist.songs ? playlist.songs : {}, playlist.createdAt, this)
+                this.lastPlaylist = new Playlist(name, playlist.songs ? playlist.songs : {}, playlist.createdAt, this)
                 yukie.database.users.update(this.id, {
                     lastPlaylistName: name
                 })
-                return this.playlist
+                return this.lastPlaylist
             }
         }
     }
