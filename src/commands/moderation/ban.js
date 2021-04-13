@@ -7,12 +7,13 @@ module.exports = {
         if (!member) return;
         if (!member.bannable) return;
 
-        if (!reason) reason = 'Não especificado'
+        if (!reason) reason = 'Não especificado';
+        
     }
 }
 
 module.exports.help = {
     category: 'moderation',
     description: 'Bane um usuário de seu servidor',
-    usage: `@usuário ou usuárioID`
+    usage: `<usuário> [motivo]`
   }

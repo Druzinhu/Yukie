@@ -1,6 +1,6 @@
 const firebase = require('firebase');
 
-module.exports = class Database {
+module.exports = class Firebase {
     static init(firebaseConfig) {
         if (firebase.apps.length) return 'the app is already online!';
         firebase.default.initializeApp(JSON.parse(firebaseConfig));
@@ -14,13 +14,12 @@ module.exports = class Database {
                 const value = await ref.once('value');
                 return value.val();
             }
-            const update = async(id, obj) => {
+            const update = (id = '', obj) => {
                 firebase.default.database().ref(locale + id).update(obj);
                 return 'updated database';
             }
-            const remove = async(id) => {
-                const ref = await firebase.default.database().ref(locale + id);
-                ref.remove();
+            const remove = (id = '') => {
+                firebase.default.database().ref(locale + id).remove();
                 return 'removed from database';
             }
             return { get, update, remove };

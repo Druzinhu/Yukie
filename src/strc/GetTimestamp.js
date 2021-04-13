@@ -23,7 +23,7 @@ module.exports = function(input) {
         Nov: 'novembro',
         Dec: 'dezembro',
     }
-    const date = `${new Date(input)}`.slice(0,21).split(' ');
+    const date = new Date(input).toString().slice(0,21).split(' ');
     [date[1], date[2]] = [date[2], `de ${months[date[1]]}`];
 
     if (date[1] < 10) date[1] = date[1].slice(1);
