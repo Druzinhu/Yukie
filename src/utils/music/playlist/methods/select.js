@@ -1,6 +1,6 @@
 module.exports = async function select (yukie, message, data, args) {
     if (!args[1]) return message.yukieReply('blocked', "Insira o nome da playlist.")
-    if (!message.author.playlist[name]) return message.yukieReply('x', 'A playlist específicada é inválida.')
+    if (!message.author.paylists[name]) return message.yukieReply('x', 'A playlist específicada é inválida.')
 
     const regexAlpha = /[^a-z0-9 -]/gi
     const name = args.slice(1).join(" ")
