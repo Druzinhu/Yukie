@@ -12,8 +12,8 @@ module.exports = {
 
         if (!queue.paused) return message.channel.send('**❌ Não há nenhuma música pausada!**');
 
+        queue.connection.dispatcher.resume();
         queue.paused = false;
-        queue.dispatcher.resume();
         message.channel.send(`⏸️ **Música despausada** por ${message.author}`);
     }
 }

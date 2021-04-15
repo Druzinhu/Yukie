@@ -32,7 +32,7 @@ module.exports = async function search(yukie, message, s) {
     else if (videoURL.test(s)) {
         result = await ytsearch({ videoId: ID });
         if (!result) {
-            message.yukieReply('blocked', `Desculpe, mas não encontrei o video com este link! Por favor, verifique se o link está certo.`);
+            message.yukieReply('blocked', `**Desculpe, mas não encontrei o video com este link!** Por favor, verifique se o link está correto.`);
             return false;
         }
     }
@@ -41,7 +41,7 @@ module.exports = async function search(yukie, message, s) {
     else {
         result = (await ytsearch(s)).videos[0];
         if (!result) {
-            message.yukieReply('x', `Desculpe, mas não encontrei nenhuma música relacionada à sua pesquisa! :(`);
+            message.yukieReply('x', `**Desculpe, mas não encontrei nenhuma música relacionada à sua pesquisa!***`);
             return false;
         }
     }
@@ -53,8 +53,8 @@ module.exports = async function search(yukie, message, s) {
         }
     } else song = getSongInfo(result, message);
     
-    if (song.seconds > 28800) {
-        message.reply('eu não reproduzo músicas com mais de 7 horas!');
+    if (song.seconds > 18000) {
+        message.yukieReply('blocked', '**Eu não reproduzo músicas com mais de 4 horas!**');
         return false;
     }
 
@@ -83,19 +83,8 @@ function getSongInfo(result, message) {
         url: 'https://www.youtube.com/watch?v=' + result.videoId,
         author: message.author,
         id: result.videoId,
-        duration: toHHmmss(result.duration.seconds),
+        duration: result.duration.timestamp,
         seconds: result.duration.seconds,
         thumbnail: 'https://i.ytimg.com/vi/' + result.videoId + '/mqdefault.jpg',
     }
-}
-function toHHmmss(secs) {
-    secs = parseInt(secs, 10);
-    const hour    = Math.floor(secs / 3600);
-    const minutes = Math.floor(secs / 60) % 60;
-    const seconds = secs % 60;
-
-    return [hour, minutes, seconds]
-    .map(v => v < 10 ? "0" + v : v)
-    .filter((v, i) => v !== "00" || i > 0)
-    .join(':');
 }

@@ -13,7 +13,7 @@ module.exports = {
             return message.channel.send('**O valor do volume deve ser entre 1 e 100!**');
         }
         vol = Math.round(vol)
-        queue.dispatcher.setVolume(vol / 100);
+        queue.dispatcher.setVolumeLogarithmic(vol / 100);
         queue.volume = vol / 100;
         message.channel.send(`🔊 Volume definido como **${vol}**`);
     }
@@ -22,5 +22,5 @@ module.exports = {
 module.exports.help = {
     category: 'music',
     description: 'Define o volume da música',
-    usage: `<1 - 100>`
+    usage: `<1-100>`
 }
