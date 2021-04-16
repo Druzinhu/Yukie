@@ -3,21 +3,24 @@ const Discord = require('discord.js');
 module.exports = {
     aliases: 'np',
     async execute(yukie, message) {
-        const queue = yukie.queues.get(message.guild.id);
-        if (!queue) return;
+        let queue = yukie.queues.get(message.guild.id);
+        if (!queue || !queue.connection.dispatcher) return;
         
         const song = queue.songs[0];
-        const seek = queue.connection.dispatcher.streamTime / 1000;
-        //const left = song.seconds - seek;
+        const left = Math.round(queue.connection.dispatcher.streamTime / 1000);
+        const line = '────────────────────────────'.split('');
+        const n = Math.round(left / (song.seconds / line.length))
+        line[n - 1  < 0 ? 0 : n - 1] = '●';
         
         const embed = new Discord.MessageEmbed()
-        .setTitle(queue.songs[0].title)
-        .setDescription()
-        .addField('\u200b', `${toHHmmss(seek)} - ${song.duration}`);
-        
+        .setTitle(song.title)
+        .setDescription(`**\`${line.join('')}\` \`${toTimestamp(left)} - ${song.duration}\`**`)
+        .setColor(process.env.DEFAULT_COLOR)
+        .setThumbnail(song.thumbnail)
+        .setURL(song.url)
         message.channel.send(embed);
 
-        function toHHmmss(secs) {
+        function toTimestamp(secs) {
             secs = parseInt(secs, 10);
             const hour    = Math.floor(secs / 3600);
             const minutes = Math.floor(secs / 60) % 60;
@@ -26,7 +29,7 @@ module.exports = {
             const result = [hour, minutes, seconds]
             .map(v => v < 10 ? '0' + v : v)
             .filter((v, i) => v !== '00' || i > 0);
-            if (result[0] < 10) result[0] = result[0].substr(1);
+            if (result[0] < 10) result[0] = result[0].slice(1);
             return result.join(':');
         }
     }
