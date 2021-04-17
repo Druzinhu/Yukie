@@ -25,6 +25,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'moderation',
-    description: 'Excluí o valor especificado de mensagens',
+    description: 'Exclui o valor especificado de mensagens.',
     usage: `<1-100>`
   }

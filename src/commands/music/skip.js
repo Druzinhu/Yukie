@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { player } = require('../../utils/music/player');
 
 module.exports = {
     aliases: 'pular',
@@ -11,7 +10,7 @@ module.exports = {
         if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.yukieReply('x', "different_connection");
 
         if (queue.songs[0] && message.author.id !== queue.songs[0].author.id && voiceChannel.members.filter(u => !u.user.bot).size > 2) {
-            const members = message.member.voice.channel.members.filter(u => !u.user.bot);
+            const members = voiceChannel.members.filter(u => !u.user.bot);
             queue.songs[0].skip = true;
             const membersize = Math.round(members.size / 2);
 

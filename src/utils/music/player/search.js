@@ -72,6 +72,17 @@ module.exports = async function search(yukie, message, s) {
         message.channel.send('**<:yt:785493083546320916> | Playlist adicionada:**', embed);
     }
     else message.channel.send(`**<:yt:785493083546320916> Música adicionada:** \`${song.title}\``);
+    /*
+    const embed = new Discord.MessageEmbed()
+    .setTitle('Reproduzindo:')
+    .setDescription(`[${song.title}](${song.url})`)
+    .addField('Visualizações', `${song.views}`.match(/.{1,3}/g).join('.'), true)
+    .addField('Postado em', song.ago, true)
+    .addField ('Canal', `[${song.author.name}](${song.author.url})`, true)
+    .setFooter(`Resquisitado por ${message.author.tag}`)
+    .setThumbnail(song.thumbnail)
+    message.channel.send(embed)
+    */
     return song;
 }
 

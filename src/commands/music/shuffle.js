@@ -1,7 +1,7 @@
 //const player = require("../../utils/music/player");
 
 module.exports = {
-    aliases: 'random aleatório embaralhar',
+    aliases: 'random aleatório r',
     async execute(yukie, message) {
         const queue = yukie.queues.get(message.guild.id);
         if (!queue) return message.yukieReply('x', 'no_queue');

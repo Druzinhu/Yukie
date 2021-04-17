@@ -1,7 +1,7 @@
 module.exports = {
     requireAcessPermission: true,
     async execute (yukie, message, args, data) {
-        if (!args.join(' ')) return message.channel.send(`${message.author} Você deve falar o nome do comando, aliase ou o evento para que eu possa recarregá-lo.`);
+        if (!args[0]) return message.channel.send(`${message.author} Você deve falar o nome do comando, aliase ou o evento para que eu possa recarregá-lo.`);
         
         let fileName = args[0].toLowerCase();
         const file = yukie.commands.get(fileName) || yukie.aliases.get(fileName);

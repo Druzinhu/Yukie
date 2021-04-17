@@ -10,17 +10,15 @@ module.exports = {
         
         if (queueSongs.length > 0) {
             let n = 0;
-            let isTrue = true;
-            while (isTrue) {
-                if (queueSongs.slice(n, n + 5).length < 1) isTrue = false;
+            let value = true;
+            while (value) {
+                if (queueSongs.slice(n, n + 5).length < 1) value = false;
                 else {
                     songs.push(queueSongs.slice(n, n + 5).join("\n---- -- ----\n"));
                     n = n + 5;
                 }
             }
-        } else {
-            songs.push('- Não há nenhuma música na fila.');
-        }
+        } else songs.push('- Não há nenhuma música na fila.');
         
         const msg = await message.channel.send(`\`\`\`${songs[0]}\`\`\``);
         if (!songs[1]) return;
@@ -32,6 +30,7 @@ module.exports = {
         const filter = (r, u) => ["➖", "➕"].includes(r.emoji.name) && u.id === message.author.id;
         const collector = msg.createReactionCollector(filter);
 
+        endTimeout();
         collector.on("collect", (r) => {
             limit = r.emoji.name === "➕" ? limit + 1 : limit - 1; 
             if (!songs[limit]) {

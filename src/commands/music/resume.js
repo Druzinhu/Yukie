@@ -1,6 +1,6 @@
 module.exports = {
     aliases: 'retomar',
-    async execute (yukie, message, args) {
+    async execute (yukie, message) {
         const queue = yukie.queues.get(message.guild.id);
         const memberVoiceChannel = message.member.voice.channel;
         const voiceChannel = message.guild.me.voice.channel;

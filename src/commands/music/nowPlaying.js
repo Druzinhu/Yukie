@@ -4,23 +4,26 @@ module.exports = {
     aliases: 'np',
     async execute(yukie, message) {
         let queue = yukie.queues.get(message.guild.id);
-        if (!queue || !queue.connection.dispatcher) return;
+        if (!queue) return message.yukieReply('blocked', "no_queue");
+
+        let value = false;
+        if (!queue.connection.dispatcher) value = true;
         
         const song = queue.songs[0];
-        const left = Math.round(queue.connection.dispatcher.streamTime / 1000);
+        const left = value ? 0 : Math.round(queue.connection.dispatcher.streamTime / 1000);
         const line = '────────────────────────────'.split('');
         const n = Math.round(left / (song.seconds / line.length))
         line[n - 1  < 0 ? 0 : n - 1] = '●';
         
         const embed = new Discord.MessageEmbed()
         .setTitle(song.title)
-        .setDescription(`**\`${line.join('')}\` \`${toTimestamp(left)} - ${song.duration}\`**`)
+        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`**`)
         .setColor(process.env.DEFAULT_COLOR)
         .setThumbnail(song.thumbnail)
         .setURL(song.url)
         message.channel.send(embed);
 
-        function toTimestamp(secs) {
+        function getTimestamp(secs) {
             secs = parseInt(secs, 10);
             const hour    = Math.floor(secs / 3600);
             const minutes = Math.floor(secs / 60) % 60;
