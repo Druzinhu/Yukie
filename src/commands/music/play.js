@@ -9,15 +9,15 @@ module.exports = {
     const meVoiceChannel = message.guild.me.voice.channel;
     
     if (!memberVoiceChannel) return message.yukieReply('blocked', "not_connected");
-    if (meVoiceChannel && memberVoiceChannel.id !== meVoiceChannel.id && message.guild.me.voice.channel.members.filter(m => !m.user.bot).size > 0) {
+    if (meVoiceChannel && memberVoiceChannel.id !== meVoiceChannel.id && meVoiceChannel.members.filter(m => !m.user.bot).size > 0)
       return message.yukieReply('x', "different_connection");
-    }
 
-    if (!args.join(' ')) return message.reply('Insira alguma palavra para efetuar a pesquisa.');
+    if (!args.join(' ')) return message.yukieReply('blocked', 'Insira alguma palavra para efetuar a pesquisa.');
 
     const permissions = memberVoiceChannel.permissionsFor(yukie.user.id);
-    if (!permissions.has(['CONNECT'])) return message.reply('Eu não tenho permissão para **conectar** nesse canal de voz!');
-    if (!permissions.has(['SPEAK'])) return message.reply('Eu não tenho permissão para **falar** nesse canal de voz!');
+    if (!permissions.has(['CONNECT']) && !permissions.has(['SPEAK'])) return message.yukieReply('x', 'Eu não tenho permissão para **conectar** e **falar** nesse canal de voz!');
+    else if (!permissions.has(['CONNECT'])) return message.yukieReply('x', 'Eu não tenho permissão para **conectar** nesse canal de voz!');
+    else if (!permissions.has(['SPEAK'])) return message.yukieReply('x', 'Eu não tenho permissão para **falar** nesse canal de voz!');
 
     try {
       const song = await search(yukie, message, args.join(' '));
@@ -30,7 +30,7 @@ module.exports = {
       }
 
       // P L A Y L I S T
-      if (song.hasPlaylist) {
+      if (song.playlist) {
         let songs;
         if (!queue) {
           yukie.interval.set(`${message.guild.id}_play`, true);
@@ -48,7 +48,7 @@ module.exports = {
         queue.songs.push(song);
       } else {
         yukie.interval.set(`${message.guild.id}_play`, true);
-        return player(yukie, message, song);
+        player(yukie, message, song);
       }
     }
     catch (err) {

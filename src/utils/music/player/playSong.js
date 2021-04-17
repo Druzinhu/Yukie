@@ -1,7 +1,7 @@
 const ytdl = require('ytdl-core-discord');
 
 module.exports = async function play(yukie, message, queue, Player) {
-    queue.connection.dispatcher = await queue.connection.play(await ytdl(queue.songs[0].url).catch(error => {
+    queue.connection.dispatcher = queue.connection.play(await ytdl(queue.songs[0].url).catch(error => {
         message.channel.send(`Ocorreu um erro ao reproduzir a música: \`${error}\``);
         console.error(error);
     }), {
@@ -15,7 +15,7 @@ module.exports = async function play(yukie, message, queue, Player) {
         }
     })
     .on("finish", () => {
-        if (!queue.loop.song && queue.songs[0].message && !queue.songs[0].message.deleted) queue.songs[0].message.delete().catch(() => {});
+        if (!queue.loop.song && queue.songs[0] && !queue.songs[0].message.deleted) queue.songs[0].message.delete().catch(() => {});
         if (queue.loop.song) return Player(yukie, message, queue.songs[0]);
         if (queue.loop.queue) queue.songs.push(queue.songs[0]);
 
@@ -27,6 +27,6 @@ module.exports = async function play(yukie, message, queue, Player) {
         console.error(error);
     });
 
-    queue.connection.dispatcher.setVolumeLogarithmic(queue.volume)
+    queue.connection.dispatcher.setVolumeLogarithmic(queue.volume);
     if (!yukie.queues.get(message.guild.id).songs[0]) queue.dispatcher.end();
 }

@@ -37,8 +37,6 @@ module.exports = {
 
 					if (r.count - 1 >= membersize) {
                         collector.stop();
-
-                        //msg.delete().catch(() => {});
                         message.channel.send('**⏭️ Música pulada**');
                         
                         if (!queue.connection.dispatcher) {

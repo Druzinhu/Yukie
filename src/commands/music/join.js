@@ -8,17 +8,18 @@ module.exports = {
         if (meVoiceChannel && memberVoiceChannel.id === meVoiceChannel.id) return message.yukieReply('x', '**Já estou conectada neste canal de voz!**');
         if (queue) {
             const membersize = message.guild.me.voice.channel.members.filter(m => !m.user.bot).size;
-            if (membersize < 1) {
+            if (membersize === 0) {
                 message.channel.send(`**📥 Conectando em \`${memberVoiceChannel.name}\`**`);
                 
                 await memberVoiceChannel.join();
-                queue.dispatcher.resume();
-                return queue.paused = false;
+                queue.connection.dispatcher.resume();
+                queue.paused = false;
             }
-            else return message.yukieReply('blocked', '**Desculpe, mas já estou conectada em um canal de voz!**');
+            else message.yukieReply('blocked', '**Desculpe, mas já estou conectada em um canal de voz!**');
+        } else {
+            message.channel.send(`**📥 Conectando em \`${memberVoiceChannel.name}\`**`);
+            memberVoiceChannel.join();
         }
-        message.channel.send(`**📥 Conectando em \`${memberVoiceChannel.name}\`**`);
-        await memberVoiceChannel.join();
     }
 }
 

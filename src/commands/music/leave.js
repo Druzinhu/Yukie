@@ -10,11 +10,11 @@ module.exports = {
 
         message.channel.send('**📤 Deconectando...**');
         if (queue) {
-            if (queue.songs[0]) queue.songs[0].message.delete().catch(() => {});
+            if (queue.songs[0].message) queue.songs[0].message.delete().catch(() => {});
             queue.connection.disconnect();
-            return yukie.queues.delete(message.guild.id);
+            yukie.queues.delete(message.guild.id);
         }
-        voiceChannel.leave();
+        else voiceChannel.leave();
     }
 }
 

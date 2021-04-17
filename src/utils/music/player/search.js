@@ -12,7 +12,6 @@ module.exports = async function search(yukie, message, s) {
     const playlistURL = /https:\/\/(www.)?youtube.com\/playlist\?list=/gi;
     const ID = s.replace(/https:\/\/(www.)?(youtube.com|youtu.be|youtube)\/(watch\?v=|playlist\?list=)?/g, '');
 
-    let song;
     let result;
     // P L A Y L I S T - U R L
     if (playlistURL.test(s)) {
@@ -27,7 +26,6 @@ module.exports = async function search(yukie, message, s) {
             return false;
         }
     }
-
     // V I D E O - U R L
     else if (videoURL.test(s)) {
         result = await ytsearch({ videoId: ID });
@@ -46,14 +44,14 @@ module.exports = async function search(yukie, message, s) {
         }
     }
 
-    if (playlist) {
-        song = {
-            videos: videos.map(result => getSongInfo(result, message)),
-            hasPlaylist: true,
-        }
-    } else song = getSongInfo(result, message);
+    let song;
+    if (playlist) song = {
+        videos: videos.map(result => getSongInfo(result, message)),
+        playlist: true,
+    }
+    else song = getSongInfo(result, message);
     
-    if (song.seconds > 18000) {
+    if (song.seconds >= 18000) {
         message.yukieReply('blocked', '**Eu não reproduzo músicas com mais de 4 horas!**');
         return false;
     }

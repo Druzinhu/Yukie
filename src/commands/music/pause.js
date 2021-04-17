@@ -2,10 +2,12 @@ module.exports = {
     aliases: 'pausar parar pause stop',
     async execute (yukie, message, args) {
         const queue = yukie.queues.get(message.guild.id);
+        const voiceChannel = message.member.voice.channel;
+        const meVoiceChannel = message.guild.me.voice.channel;
 
-        if (!message.member.voice.channel) return;
+        if (!voiceChannel) return;
         if (!queue) return message.yukieReply('blocked', "no_queue");
-        if (message.member.voice.channel !== message.guild.me.voice.channel) return message.yukieReply('x', "different_connection"); 
+        if (voiceChannel !== meVoiceChannel) return message.yukieReply('x', "different_connection"); 
 
         if (queue.paused) {
             return message.channel.send('**❌ A música já está pausada!**');
@@ -13,7 +15,8 @@ module.exports = {
 
         queue.connection.dispatcher.pause();
         queue.paused = true;
-        message.channel.send(`▶️ **Música pausada** por ${message.author}`);
+        if (meVoiceChannel.members.filter(u => !u.user.bot).size > 1) message.channel.send(`**▶️ Música pausada** por ${message.author}`);
+        else message.channel.send(`**▶️ Música pausada**`);
     }
 }
 

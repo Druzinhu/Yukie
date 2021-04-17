@@ -15,12 +15,6 @@ module.exports = {
                 const n = Math.floor(Math.random() * (songs.length - 1) + 1);
                 [songs[i], songs[n]] = [songs[n], songs[i]];
             }
-            /*for (let i = 1; i < songs.length; i++) { 
-                const n = Math.floor(Math.random() * (i + 1));
-    
-                if (n < 1) i--;
-                else [songs[i], songs[n]] = [songs[n], songs[i]];
-            }*/
         }
         message.channel.send(`**🔀 Músicas randomizadas**`);
     }
