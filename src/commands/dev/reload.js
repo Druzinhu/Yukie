@@ -15,14 +15,14 @@ module.exports = {
             yukie.commands.set(fileName, pull);
             yukie.aliases.set(pull.aliases, pull);
         
-            message.channel.send(`O reload do comando **${fileName}** foi bem sucedido!`)
+            message.channel.send(`O reload do comando **${fileName}** foi bem sucedido!`);
         } catch (error) {
             console.error(error);
-            message.channel.send(`Ocorreu um erro ao dar reload no comando **${fileName}**:\n\`${error}\``)
+            message.channel.send(`Ocorreu um erro ao dar reload no comando **${fileName}**:\n\`${error}\``);
         }
     }
 }
 
 module.exports.help = {
-    category: 'developer',
+    category: 'dev',
 }

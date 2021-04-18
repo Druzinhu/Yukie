@@ -1,8 +1,7 @@
 module.exports = {
     aliases: 'desbanir',
     async execute(yukie, message, args) {
-        const member = args[0].replace(/[<@!>]/g, '');
-        console.log(member)
+        const member = args[0] ? args[0].replace(/[<@!>]/g, '') : undefined;
         const banned = await message.guild.fetchBans()
 
         if (!message.member.hasPermission('BAN_MEMBERS')) return message.yukieReply('blocked', '**Você não possui permissão para desbanir usuários!**');

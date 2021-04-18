@@ -1,5 +1,5 @@
 module.exports = function(input) {
-    input = input - 20000000 + 9200000;
+    input = input - 10800000;
     const days = {
         Mon: 'Segunda',
         Tue: 'Terça',

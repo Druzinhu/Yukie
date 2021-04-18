@@ -9,6 +9,10 @@ module.exports = {
         
         if (!args[0]) return message.yukieReply('blocked', '**Você deve especificar o usuário que deseja banir!**')
         if (!member) return message.yukieReply('x', 'Desculpe, mas não encontrei o usuário especificado!');
+        
+        if (message.member.id !== message.guild.owner.id && member.roles.highest.position >= message.member.roles.highest.position) {
+            return message.yukieReply('x', '**O usuário especificado não pode ser banido por possuir um cargo acima do seu!**');
+        }
         if (!member.bannable) return message.yukieReply('blocked','**O usuário não pode ser banido por possuir um cargo acima do meu!** Para mim baní-lo, coloque meu cargo acima do dele.');
 
         if (!reason) reason = 'Não especificado';
