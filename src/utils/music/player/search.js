@@ -8,7 +8,7 @@ module.exports = async function search(yukie, message, s) {
     if (yukie.queues.get(`${message.guild.id}_play`)) return false;
     message.channel.send('**🔎 Pesquisando...**');
 
-    const videoURL = /(https:\/\/\)\(www.)(youtube.com|youtu.be)/gi;
+    const videoURL = /(https:\/\/\)\(www.)?(youtube.com|youtu.be)/gi;
     const playlistURL = /https:\/\/(www.)?youtube.com\/playlist\?list=/gi;
     const ID = s.replace(/https:\/\/(www.)?(youtube.com|youtu.be|youtube)\/(watch\?v=|playlist\?list=)?/g, '');
 
@@ -69,31 +69,45 @@ module.exports = async function search(yukie, message, s) {
         .setURL(playlist.url)
         .setThumbnail(playlist.thumbnail)
         
-        message.channel.send('**<:yt:785493083546320916> | Playlist adicionada:**', embed);
+        message.channel.send('**<:YouTube:785493083546320916> | Playlist adicionada:**', embed);
     }
-    else message.channel.send(`**<:yt:785493083546320916> Música adicionada:** \`${song.title}\``);
-    /*
-    const embed = new Discord.MessageEmbed()
-    .setTitle('Reproduzindo:')
-    .setDescription(`[${song.title}](${song.url})`)
-    .addField('Visualizações', `${song.views}`.match(/.{1,3}/g).join('.'), true)
-    .addField('Postado em', song.ago, true)
-    .addField ('Canal', `[${song.author.name}](${song.author.url})`, true)
-    .setFooter(`Resquisitado por ${message.author.tag}`)
-    .setThumbnail(song.thumbnail)
-    message.channel.send(embed)
-    */
+    else message.channel.send(`**<:YouTube:785493083546320916> Música adicionada:** \`${song.title}\``);
     return song;
 }
 
-function getSongInfo(result, message) {
+const getPostDate = (ago) => {
+    const date = {
+        second: 'segundo',
+        seconds: 'segundos',
+        minute: 'minuto',
+        minutes: 'minutos',
+        hour: 'hora',
+        hours: 'horas',
+        day: 'dia',
+        days: 'dias',
+        week: 'semana',
+        weeks: 'semanas',
+        month: 'mês',
+        months: 'meses',
+        year: 'ano',
+        years: 'anos',
+    }
+    ago = ago.replace('ago', 'atrás').split(' ');
+    ago[1] = date[ago[1]];
+    return ago.join(' ');
+}
+
+function getSongInfo(song, message) {
     return {
-        title: result.title,
-        url: 'https://www.youtube.com/watch?v=' + result.videoId,
+        title: song.title,
+        url: 'https://www.youtube.com/watch?v=' + song.videoId,
+        views: `${song.views}`,
+        channel: song.author,
+        ago: getPostDate(song.ago),
         author: message.author,
-        id: result.videoId,
-        duration: result.duration.timestamp,
-        seconds: result.duration.seconds,
-        thumbnail: 'https://i.ytimg.com/vi/' + result.videoId + '/mqdefault.jpg',
+        id: song.videoId,
+        duration: song.duration.timestamp,
+        seconds: song.duration.seconds,
+        thumbnail: 'https://i.ytimg.com/vi/' + song.videoId + '/mqdefault.jpg',
     }
 }

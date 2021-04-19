@@ -37,8 +37,12 @@ module.exports = async function Player(yukie, message, song) {
     }
     function createEmbed() {
       const embed = new Discord.MessageEmbed()
-      .setTitle(song.title)
-      .setDescription(`${song.author} • Duração ${song.duration}`)
+      .setDescription(`**[${song.title}](${song.url})**`)
+      .addField('Duração', `\`${song.duration}\``)
+      .addField('Visualizações', `\`${song.views.match(/.{1,3}/g).join('.')}\``, true)
+      .addField('Postagem', `\`${song.ago}\``, true)
+      .addField('Canal', `[${song.channel.name}](${song.channel.url})`, true)
+      .setFooter(`Requisitado por ${song.author.tag}`)
       .setThumbnail(song.thumbnail)
       .setURL(song.url)
       .setColor(process.env.DEFAULT_COLOR);

@@ -16,7 +16,8 @@ module.exports = async (oldState, newState, yukie) => {
     if (voiceChannel && oldUser === voiceChannel.id && newUser !== voiceChannel.id) {
         // Verifica se não há ninguém na call
         if (voiceChannel.members.filter(m => !m.user.bot).size === 0) {
-            queue.dispatcher.pause();
+            if (queue.connection.dispatcher) queue.connection.dispatcher.pause();
+            
             timeout = setTimeout(() => {
                 if (yukie.queues.get(guildID) && guild.me.voice.channel && guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0) {
                     queue = yukie.queues.get(guildID);
@@ -37,8 +38,8 @@ module.exports = async (oldState, newState, yukie) => {
         clearTimeout(timeout);
 
         // textChannel.send(`${yukie.users.cache.get(newState.id).username} entrou na call`)
-        if (queue.dispatcher.pausedSince) {
-            queue.dispatcher.resume();
+        if (queue.connection.dispatcher.pausedSince) {
+            queue.connection.dispatcher.resume();
             queue.paused = false;
         }
     }

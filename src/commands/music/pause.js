@@ -1,5 +1,5 @@
 module.exports = {
-    aliases: 'pausar parar pause stop',
+    aliases: 'pausar',
     async execute (yukie, message, args) {
         const queue = yukie.queues.get(message.guild.id);
         const voiceChannel = message.member.voice.channel;

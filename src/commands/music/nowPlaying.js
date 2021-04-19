@@ -17,10 +17,10 @@ module.exports = {
         
         const embed = new Discord.MessageEmbed()
         .setTitle(song.title)
-        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`**`)
-        .setColor(process.env.DEFAULT_COLOR)
-        .setThumbnail(song.thumbnail)
         .setURL(song.url)
+        .setThumbnail(song.thumbnail)
+        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`\n\nRequisitado por ${song.author}**`)
+        .setColor(process.env.DEFAULT_COLOR)
         message.channel.send(embed);
 
         function getTimestamp(secs) {
