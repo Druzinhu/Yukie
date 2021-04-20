@@ -28,27 +28,37 @@ module.exports = async(yukie, message) => {
     let i = 0;
     if (!queue) {
         i = 1;
-        const song = songInfo(songs[0], message.author);
+        const song = getSongInfo(songs[0], message.author);
         await player(yukie, message, song);
     }
     queue = yukie.queues.get(message.guild.id);
     songs.slice(i).map(song => {
-        queue.songs.push(songInfo(song, message.author));
+        queue.songs.push(getSongInfo(song, message.author));
     });
 }
 
-function songInfo(song, author) {
-    return { 
+function getSongInfo(song, author) {
+    let sec = song.duration.split(':');
+    if (sec.length === 3) {
+        sec[0] = sec[0] * 3600;
+        sec[1] = sec[1] * 60;
+        sec = sec[0] + sec[1] + Number(sec[2]);
+    } else {
+        sec[0] = sec[0] * 60;
+        sec = sec[0] + Number(sec[1]);
+    }
+    
+    return {
         title: song.title,
         id: song.id,
-        playlist: { 
+        seconds: sec,
+        playlist: {
             name: author.lastPlaylist.name, 
             authorId: author.id,
         },
-        url: "https://www.youtube.com/watch?v=" + song.id,
+        url: 'https://www.youtube.com/watch?v=' + song.id,
         duration: song.duration,
-        thumbnail: "https://i.ytimg.com/vi/" + song.id + "/mqdefault.jpg",
+        thumbnail: 'https://i.ytimg.com/vi/' + song.id + '/mqdefault.jpg',
         author: author,
     }
-    //ys({ videoId: song.id }).then(v => result.seconds = v.seconds);
 }

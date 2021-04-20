@@ -19,7 +19,7 @@ module.exports = {
         .setTitle(song.title)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
-        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`\n\nRequisitado por ${song.author}**`)
+        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`  |  ${song.author} **`)
         .setColor(process.env.DEFAULT_COLOR)
         message.channel.send(embed);
 
@@ -35,6 +35,17 @@ module.exports = {
             if (result[0] < 10) result[0] = result[0].slice(1);
             return result.join(':');
         }
+        /*
+        .setDescription(`**[${song.title}](${song.url})**`)
+        .addField('Duração', `\`${song.duration}\``)
+        .addField('Visualizações', `\`${song.views.match(/.{1,3}/g).join('.')}\``, true)
+        .addField('Postagem', `\`${song.ago}\``, true)
+        .addField('Canal', `[${song.channel.name}](${song.channel.url})`, true)
+        .setFooter(`Requisitado por ${song.author.tag}`)
+        .setThumbnail(song.thumbnail)
+        .setURL(song.url)
+        .setColor(process.env.DEFAULT_COLOR);
+        */
     }
 }
 

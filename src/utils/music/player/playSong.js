@@ -26,7 +26,9 @@ module.exports = async function play(yukie, message, queue, Player) {
         message.channel.send(`Ocorreu um erro ao reproduzir a música: \`${error}\``);
         console.error(error);
     });
-
     queue.connection.dispatcher.setVolumeLogarithmic(queue.volume);
-    if (!yukie.queues.get(message.guild.id).songs[0]) queue.dispatcher.end();
+
+    queue = yukie.queues.get(message.guild.id);
+    if (queue.paused) queue.connection.dispatcher.pause();
+    if (!queue.songs[0]) queue.connection.dispatcher.end();
 }

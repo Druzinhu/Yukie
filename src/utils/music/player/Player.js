@@ -65,6 +65,10 @@ module.exports = async function Player(yukie, message, song) {
   yukie.queues.set(message.member.guild.id, queue);
   await playSong(yukie, message, queue, Player);
 
+  queue = yukie.queues.get(message.member.guild.id);
+  if (queue.paused) queue.connection.dispatcher.pause();
+  if (!queue.songs[0]) queue.connection.dispatcher.end();
+  
   queue.connection.on("disconnect", () => yukie.queues.delete(message.guild.id));
   if (yukie.interval.has(`${message.guild.id}_play`)) yukie.interval.delete(`${message.guild.id}_play`);
 }

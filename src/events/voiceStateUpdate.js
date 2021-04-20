@@ -16,7 +16,8 @@ module.exports = async (oldState, newState, yukie) => {
     if (voiceChannel && oldUser === voiceChannel.id && newUser !== voiceChannel.id) {
         // Verifica se não há ninguém na call
         if (voiceChannel.members.filter(m => !m.user.bot).size === 0) {
-            if (queue.connection.dispatcher) queue.connection.dispatcher.pause();
+            if (!queue.connection.dispatcher) queue.paused = true;
+            else queue.connection.dispatcher.pause();
             
             timeout = setTimeout(() => {
                 if (yukie.queues.get(guildID) && guild.me.voice.channel && guild.me.voice.channel.members.filter(m => !m.user.bot).size === 0) {
