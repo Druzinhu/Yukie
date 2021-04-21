@@ -27,6 +27,6 @@ module.exports.execute = async (yukie, message, args, data) => {
 
 module.exports.help = {
     category: 'music',
-    description: '',
-    usage: '',
+    description: 'Contém vários métodos de playlist',
+    usage: '<método>',
 }

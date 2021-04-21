@@ -6,9 +6,10 @@ module.exports = {
         if (!message.member.hasPermission('ADIMINISTRATOR')) return message.yukieReply('blocked', '**Você não possui permissão para executar o comando!**');
         if (!message.guild.me.hasPermission('MANAGE_MESSAGES')) return message.yukieReply('blocked', '**Eu não tenho permissão para excluir mensagens!** Para que eu possa excluir mensagens, eu necessito da permissão de **Gerenciar mensagens**.');
 
-        if (!args[0]) return message.yukieReply('x', 'Ecolha um valor de 1 à 100 para as mensagens à serem deletadas.');
-        if (isNaN(args[0]) || !Number.isInteger(args[0])) return message.yukieReply('blocked', 'O valor de mensagens deve ser de 1 à 100!');
+        if (!number) return message.yukieReply('x', 'Ecolha um valor de 1 à 100 para as mensagens à serem deletadas.');
+        if (isNaN(number) || !/^\d+$/.test(number)) return message.yukieReply('blocked', 'O valor de mensagens deve ser de 1 à 100!');
 
+        if (!message.deleted) message.delete();
         const messages = await message.channel.messages.fetch({ limit: number });
         const deleted = await message.channel.bulkDelete(messages, true);
 
@@ -25,6 +26,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'moderation',
-    description: 'Exclui o valor especificado de mensagens.',
+    description: 'Exclui o valor especificado de mensagens do chat.',
     usage: `<1-100>`
   }

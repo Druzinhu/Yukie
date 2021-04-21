@@ -6,8 +6,8 @@ module.exports = {
         const meVoiceChannel = message.guild.me.voice.channel;
 
         if (!voiceChannel) return;
-        if (!queue) return message.yukieReply('blocked', "no_queue");
-        if (voiceChannel !== meVoiceChannel) return message.yukieReply('x', "different_connection"); 
+        if (!queue) return message.yukieReply("no_queue");
+        if (voiceChannel !== meVoiceChannel) return message.yukieReply("different_connection"); 
 
         if (queue.paused) {
             return message.channel.send('**❌ A música já está pausada!**');

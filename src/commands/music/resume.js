@@ -5,10 +5,10 @@ module.exports = {
         const memberVoiceChannel = message.member.voice.channel;
         const voiceChannel = message.guild.me.voice.channel;
         
-        if (!memberVoiceChannel) return message.yukieReply('blocked', "not_connected");
-        if (!voiceChannel) return message.yukieReply('x', "bot_not_connected");
-        if (voiceChannel && memberVoiceChannel.id !== voiceChannel.id) return message.yukieReply('x', "different_connection");
-        if (!queue) return message.yukieReply('blocked', "no_queue");
+        if (!memberVoiceChannel) return message.yukieReply("not_connected");
+        if (!voiceChannel) return message.yukieReply("bot_not_connected");
+        if (voiceChannel && memberVoiceChannel.id !== voiceChannel.id) return message.yukieReply("different_connection");
+        if (!queue) return message.yukieReply("no_queue");
 
         if (!queue.paused) return message.channel.send('**❌ Não há nenhuma música pausada!**');
 

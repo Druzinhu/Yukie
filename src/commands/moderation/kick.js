@@ -27,6 +27,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'moderation',
-    description: 'Expulsa um usuário de seu servidor.',
+    description: 'Expulsa um usuário de seu servidor',
     usage: `<usuário> [motivo]`
 }

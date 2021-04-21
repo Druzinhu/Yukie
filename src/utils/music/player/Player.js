@@ -27,27 +27,18 @@ module.exports = async function Player(yukie, message, song) {
   if (message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
     if (song.loop) {
       if (song.message.deleted) {
-        song.message = await message.channel.send('**🎧 Tocando agora:**', createEmbed());
+        song.message = await message.channel.send(`**🎧 Tocando agora:** \`${song.title}\``);
         song.message.react('💜');
       }
     } else {
-      song.message = await message.channel.send('**🎧 Tocando agora:**', createEmbed());
+      song.message = await message.channel.send(`**🎧 Tocando agora:** \`${song.title}\``);
       song.message.react('💜');
       song.loop = true;
     }
-    function createEmbed() {
+    /*function createEmbed() {
       const embed = new Discord.MessageEmbed()
-      .setDescription(`**[${song.title}](${song.url})**`)
-      .addField('Duração', `\`${song.duration}\``)
-      .addField('Visualizações', `\`${song.views.match(/.{1,3}/g).join('.')}\``, true)
-      .addField('Postagem', `\`${song.ago}\``, true)
-      .addField('Canal', `[${song.channel.name}](${song.channel.url})`, true)
-      .setFooter(`Requisitado por ${song.author.tag}`)
-      .setThumbnail(song.thumbnail)
-      .setURL(song.url)
-      .setColor(process.env.DEFAULT_COLOR);
       return embed;
-    }
+    }*/
   }
     
   if (!queue) {

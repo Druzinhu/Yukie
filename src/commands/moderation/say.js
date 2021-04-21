@@ -19,4 +19,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'moderation',
+    description: 'Envia uma mensagem no chat com a frase que você digitou',
+    usage: '[#canal de texto] <frase>'
 }

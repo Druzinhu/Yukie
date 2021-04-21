@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
 const cooldown = new Discord.Collection();
 
-//const queueMessages = require('../utils/music/queueMessages');
-const yukieReply = require('../strc/YukieReply');
+const yukieReply = require('../strc/prototype/YukieReply');
 const prefix = process.env.PREFIX;
 
 module.exports = async (message, yukie) => {                 //yukie.blockedUsers[message.author.id]

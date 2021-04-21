@@ -8,9 +8,9 @@ module.exports = {
     const memberVoiceChannel = message.member.voice.channel;
     const meVoiceChannel = message.guild.me.voice.channel;
     
-    if (!memberVoiceChannel) return message.yukieReply('blocked', "not_connected");
+    if (!memberVoiceChannel) return message.yukieReply("not_connected");
     if (meVoiceChannel && memberVoiceChannel.id !== meVoiceChannel.id && meVoiceChannel.members.filter(m => !m.user.bot).size > 0)
-      return message.yukieReply('x', "different_connection");
+      return message.yukieReply("different_connection");
 
     if (!args.join(' ')) return message.yukieReply('blocked', 'Insira alguma palavra para efetuar a pesquisa.');
 

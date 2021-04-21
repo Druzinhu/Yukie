@@ -5,9 +5,9 @@ module.exports = {
         const voiceChannel = message.member.voice.channel;
         const meVoiceChannel = message.guild.me.voice.channel;
 
-        if (!voiceChannel) return;
-        if (!queue) return message.yukieReply('blocked', "no_queue");
-        if (voiceChannel !== meVoiceChannel) return message.yukieReply('x', "different_connection"); 
+        if (!queue) return message.yukieReply("no_queue");
+        if (!voiceChannel) return message.yukieReply("not_connected");
+        if (voiceChannel !== meVoiceChannel) return message.yukieReply("different_connection"); 
 
         message.react('✅');
         yukie.queues.delete(message.guild.id);
@@ -17,6 +17,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: 'Para de tocar as músicas na fila',
+    description: 'Para de tocar as músicas da fila',
     usage: ''
 }

@@ -6,8 +6,8 @@ module.exports = {
         const queue = yukie.queues.get(message.guild.id);
         const voiceChannel = message.member.voice.channel;
 
-        if (!queue) return message.yukieReply('blocked', "no_queue");
-        if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.yukieReply('x', "different_connection");
+        if (!queue) return message.yukieReply("no_queue");
+        if (!voiceChannel || voiceChannel.id !== message.guild.me.voice.channel.id) return message.yukieReply("different_connection");
 
         if (queue.songs[0] && message.author.id !== queue.songs[0].author.id && voiceChannel.members.filter(u => !u.user.bot).size > 2) {
             const members = voiceChannel.members.filter(u => !u.user.bot);
@@ -53,9 +53,7 @@ module.exports = {
         if (voiceChannel.members.filter(u => !u.user.bot).size > 1) message.channel.send(`**⏭️ Música pulada** por ${message.author}`);
         else message.channel.send(`**⏭️ Música pulada**`);
 
-        if (!queue.connection.dispatcher) {
-            return queue.songs.shift();
-        }
+        if (!queue.connection.dispatcher) return queue.songs.shift();
         queue.paused = false;
         queue.connection.dispatcher.end();
     }
@@ -63,6 +61,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: 'Pula a música que está sendo reproduzida',
+    description: 'Pula a música que está tocando',
     usage: ''
 }

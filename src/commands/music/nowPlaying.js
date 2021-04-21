@@ -3,8 +3,9 @@ const Discord = require('discord.js');
 module.exports = {
     aliases: 'np',
     async execute(yukie, message) {
+        return;
         let queue = yukie.queues.get(message.guild.id);
-        if (!queue) return message.yukieReply('blocked', "no_queue");
+        if (!queue) return message.yukieReply('no_queue');
 
         let value = false;
         if (!queue.connection.dispatcher) value = true;
@@ -15,13 +16,7 @@ module.exports = {
         const n = Math.round(left / (song.seconds / line.length))
         line[n - 1  < 0 ? 0 : n - 1] = '●';
         
-        const embed = new Discord.MessageEmbed()
-        .setTitle(song.title)
-        .setURL(song.url)
-        .setThumbnail(song.thumbnail)
-        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`  |  ${song.author} **`)
-        .setColor(process.env.DEFAULT_COLOR)
-        message.channel.send(embed);
+        //`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`  |  ${song.author} **`
 
         function getTimestamp(secs) {
             secs = parseInt(secs, 10);
@@ -51,6 +46,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: '',
+    description: 'Mostra a música que está tocando no momento',
     usage: '',
 }

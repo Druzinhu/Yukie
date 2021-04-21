@@ -2,7 +2,7 @@ module.exports = {
     aliases: "fila",
     async execute (yukie, message, args, data) {
         const queue = yukie.queues.get(message.guild.id);
-        if (!queue) return message.yukieReply('blocked', "no_queue");
+        if (!queue) return message.yukieReply("no_queue");
 
         let i = 1;
         const queueSongs = queue.songs.map(s => `${i++} - ${s.title} | ${s.duration}`);

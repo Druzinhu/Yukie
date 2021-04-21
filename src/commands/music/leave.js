@@ -5,8 +5,8 @@ module.exports = {
         const voiceChannel = message.member.voice.channel;
         const meVoiceChannel = message.guild.me.voice.channel;
 
-        if (!meVoiceChannel) return message.yukieReply('blocked', "bot_not_connected");
-        if (voiceChannel !== meVoiceChannel || !voiceChannel) return message.yukieReply('x', "different_connection");
+        if (!meVoiceChannel) return message.yukieReply("bot_not_connected");
+        if (voiceChannel !== meVoiceChannel || !voiceChannel) return message.yukieReply("different_connection");
 
         message.channel.send('**📤 Deconectando...**');
         if (queue) {

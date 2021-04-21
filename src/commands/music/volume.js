@@ -4,8 +4,8 @@ module.exports = {
         let vol = args.join(' ');
         const queue = yukie.queues.get(message.guild.id);
     
-        if (!message.member.voice.channel) return;
-        if (!queue) return message.yukieReply('blocked', "no_queue");
+        if (!queue) return message.yukieReply('no_queue');
+        if (!message.member.voice.channel) return message.yukieReply('not_connected');
         if (message.author.id !== queue.songs[0].author.id) {
             return message.yukieReply('x', 'Somente o usuário que requisitou a música pode definir o volume!');
         }

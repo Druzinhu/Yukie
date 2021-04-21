@@ -25,6 +25,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: 'Faz o bot entrar no mesmo canal de voz que você',
+    description: 'Faz com que o bot entre no mesmo canal de voz que você',
     usage: ''
 }

@@ -20,6 +20,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'moderation',
-    description: 'Desbane um usuário de seu servidor.',
+    description: 'Desbane um usuário de seu servidor',
     usage: `<usuário> [motivo]`
 }

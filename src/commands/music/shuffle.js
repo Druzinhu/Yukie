@@ -4,7 +4,7 @@ module.exports = {
     aliases: 'random aleatório r',
     async execute(yukie, message) {
         const queue = yukie.queues.get(message.guild.id);
-        if (!queue) return message.yukieReply('x', 'no_queue');
+        if (!queue) return message.yukieReply('no_queue');
 
         const songs = queue.songs;
 
@@ -22,6 +22,6 @@ module.exports = {
 
 module.exports.help = {
     category: 'music',
-    description: '',
+    description: 'Ativa o modo aleatório das músicas',
     usage: ''
 }
