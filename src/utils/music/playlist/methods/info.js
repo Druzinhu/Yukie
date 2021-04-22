@@ -19,7 +19,7 @@ module.exports = async function view(yukie, message) {
         message.channel.send(embed);
     } else {
         songs = songs.sort((a, b) => a.position-b.position)
-        .map(song => `**${song.position}** - **[${song.title}](${'https://www.youtube.com/watch?v=' + song.id})** - \`${song.duration}\``);
+        .map(song => `**${song.position}** - [${song.title}](${'https://www.youtube.com/watch?v=' + song.id}) - \`${song.duration}\``);
 
         const pags = [];
         let n = 0;

@@ -98,16 +98,17 @@ const getPostDate = (ago) => {
 }
 
 function getSongInfo(song, message) {
-    return {
+    const result = {
         title: song.title,
         url: 'https://www.youtube.com/watch?v=' + song.videoId,
-        views: `${song.views}`,
-        channel: song.author,
-        ago: getPostDate(song.ago),
         author: message.author,
         id: song.videoId,
         duration: song.duration.timestamp,
         seconds: song.duration.seconds,
         thumbnail: 'https://i.ytimg.com/vi/' + song.videoId + '/mqdefault.jpg',
     }
+    if (song.views) result.views = `${song.views}`;
+    if (song.ago) result.ago = getPostDate(song.ago);
+    if (song.author) result.channel = song.author;
+    return result;
 }

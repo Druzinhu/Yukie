@@ -27,18 +27,23 @@ module.exports = async function Player(yukie, message, song) {
   if (message.channel.permissionsFor(message.guild.me).has(['EMBED_LINKS'])) {
     if (song.loop) {
       if (song.message.deleted) {
-        song.message = await message.channel.send(`**🎧 Tocando agora:** \`${song.title}\``);
+        song.message = await message.channel.send(`**🎧 Tocando agora:**`, createEmbed());
         song.message.react('💜');
       }
     } else {
-      song.message = await message.channel.send(`**🎧 Tocando agora:** \`${song.title}\``);
+      song.message = await message.channel.send(`**🎧 Tocando agora:**`, createEmbed());
       song.message.react('💜');
       song.loop = true;
     }
-    /*function createEmbed() {
+    function createEmbed() {
       const embed = new Discord.MessageEmbed()
+      .setTitle(song.title)
+      .setURL(song.url)
+      .setDescription(`Por ${song.author} • Duração \`${song.duration}\``)
+      .setThumbnail(song.thumbnail)
+      .setColor(process.env.DEFAULT_COLOR)
       return embed;
-    }*/
+    }
   }
     
   if (!queue) {

@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 module.exports = {
     aliases: 'np',
     async execute(yukie, message) {
-        return;
         let queue = yukie.queues.get(message.guild.id);
         if (!queue) return message.yukieReply('no_queue');
 
@@ -12,11 +11,24 @@ module.exports = {
         
         const song = queue.songs[0];
         const left = value ? 0 : Math.round(queue.connection.dispatcher.streamTime / 1000);
-        const line = '────────────────────────────'.split('');
+        const line = '───────────────────────────────'.split('');
         const n = Math.round(left / (song.seconds / line.length))
         line[n - 1  < 0 ? 0 : n - 1] = '●';
         
-        //`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`  |  ${song.author} **`
+        const embed = new Discord.MessageEmbed()
+        .setTitle(song.title)
+        .setDescription(`**\`${line.join('')}\` \`${getTimestamp(left)} - ${song.duration}\`**`)
+        .setFooter(`Requisitado por ${song.author.tag}`)
+        .setURL(song.url)
+        .setThumbnail(song.thumbnail)
+        .setColor(process.env.DEFAULT_COLOR);
+        
+        if (song.views && song.ago && song.channel) {
+            embed.addField('Visualizações', `\`${song.views.match(/.{1,3}/g).join('.')}\``, true);
+            embed.addField('Postagem', `\`${song.ago}\``, true);
+            embed.addField('Canal', `\`${song.channel.name}\``, true);
+        }
+        message.channel.send(embed);
 
         function getTimestamp(secs) {
             secs = parseInt(secs, 10);
@@ -30,17 +42,6 @@ module.exports = {
             if (result[0] < 10) result[0] = result[0].slice(1);
             return result.join(':');
         }
-        /*
-        .setDescription(`**[${song.title}](${song.url})**`)
-        .addField('Duração', `\`${song.duration}\``)
-        .addField('Visualizações', `\`${song.views.match(/.{1,3}/g).join('.')}\``, true)
-        .addField('Postagem', `\`${song.ago}\``, true)
-        .addField('Canal', `[${song.channel.name}](${song.channel.url})`, true)
-        .setFooter(`Requisitado por ${song.author.tag}`)
-        .setThumbnail(song.thumbnail)
-        .setURL(song.url)
-        .setColor(process.env.DEFAULT_COLOR);
-        */
     }
 }
 
