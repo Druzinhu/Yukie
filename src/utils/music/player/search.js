@@ -60,15 +60,21 @@ module.exports = async function search(yukie, message, s) {
         message.channel.send('Preciso da permissão de **inserir links** para poder enviar **embeds**!');
     }
     else if (playlist) {
+        const date = playlist.date.split('-');
+        [date[0], date[2]] = [date[2], date[0]];
+        if (date[1] < 10) date[1] = 0 + date[1];
+
         const embed = new Discord.MessageEmbed()
-        .setAuthor(`${message.author.tag}`, `${message.author.avatarURL()}`)
         .setTitle(playlist.title)
-        .addField('Canal', `[${playlist.author.name}](https://youtube.com/channel/UCuNZtu_l2p5VMu2-Efpq0AA)`, true)
-        .addField('Contém', `\`${videos.length}\` músicas`, true)
+        .addField('Canal', `\`${playlist.author.name}\``, true)
+        .addField('Contém', `\`${playlist.size} músicas\``, true)
+        .addField('Criada em', `\`${date.join('/')}\``, true)
+        .addField('Visualizações', `\`${playlist.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}\``)
         .setColor(process.env.DEFAULT_COLOR)
         .setURL(playlist.url)
-        .setThumbnail(playlist.thumbnail)
-        
+        .setThumbnail(playlist.thumbnail.replace(/\/hqdefault/g, '/mqdefault'))
+        .setFooter(message.author.tag, message.author.displayAvatarURL({ format: 'png' }))
+        .setTimestamp();
         message.channel.send('**<:YouTube:785493083546320916> | Playlist adicionada:**', embed);
     }
     else message.channel.send(`**<:YouTube:785493083546320916> Música adicionada:** \`${song.title}\``);
@@ -107,8 +113,10 @@ function getSongInfo(song, message) {
         seconds: song.duration.seconds,
         thumbnail: 'https://i.ytimg.com/vi/' + song.videoId + '/mqdefault.jpg',
     }
-    if (song.views) result.views = `${song.views}`;
-    if (song.ago) result.ago = getPostDate(song.ago);
-    if (song.author) result.channel = song.author;
+    if (song.views && song.ago && song.author) {
+        result.views = song.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        result.ago = getPostDate(song.ago);
+        result.channel = song.author;
+    }
     return result;
 }

@@ -24,7 +24,7 @@ module.exports = {
         .setColor(process.env.DEFAULT_COLOR);
         
         if (song.views && song.ago && song.channel) {
-            embed.addField('Visualizações', `\`${song.views.match(/.{1,3}/g).join('.')}\``, true);
+            embed.addField('Visualizações', `\`${song.views}\``, true);
             embed.addField('Postagem', `\`${song.ago}\``, true);
             embed.addField('Canal', `\`${song.channel.name}\``, true);
         }
