@@ -1,6 +1,7 @@
 module.exports = {
 	async execute(yukie, message, args, data) {
-		const msg = args.join(" ");
+		const array = args.join(' ').replace(/ /g, '/').split(/(?!$)/u);
+
 		const morse = {
 			A: '.-',
 			À: '.--.-',
@@ -99,14 +100,13 @@ module.exports = {
 			'?': '..--..',
 			'¿': '..-.-',
 			'¡': '--...-'
-		};
-		const array = msg.replace(/ /g, '/').split("");
-		
-		array.forEach((l, i)=> {
+		}
+		array.forEach((l, i) => {
 			if (l === '/') return;
-			array[i] = morse[array[i].toUpperCase()];
+			s = array[i].toUpperCase();
+			if (morse[s]) array[i] = morse[s];
 		});
-		
+
 		message.channel.send(array.join(' '));
 	}
 }
